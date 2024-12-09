@@ -1042,23 +1042,23 @@ if st.sidebar.checkbox("FinViz"):
             result = {}
             if "Fundamental Data" in data_types:
                 df = quote.fundamental_df.head(10)
-                df["Ticker"] = ticker
+                df.insert(0, "Ticker", ticker)
                 result["fundamental_data"] = df
             if "News" in data_types:
                 df = quote.outer_news_df.head(10)
-                df["Ticker"] = ticker
+                df.insert(0, "Ticker", ticker)
                 result["outer_news"] = df
             if "Insider Trading" in data_types:
                 df = quote.insider_trading_df
-                df["Ticker"] = ticker
+                df.insert(0, "Ticker", ticker)
                 result["insider_trading"] = df
             if "Outer Ratings" in data_types:
                 df = quote.outer_ratings_df
-                df["Ticker"] = ticker
+                df.insert(0, "Ticker", ticker)
                 result["outer_ratings"] = df
             if "Income Statement" in data_types:
                 df = quote.income_statement_df
-                df["Ticker"] = ticker
+                df.insert(0, "Ticker", ticker)
                 result["income_statement"] = df
     
             return result
@@ -1097,14 +1097,14 @@ if st.sidebar.checkbox("FinViz"):
             st.write(f"#### {data_type.replace('_', ' ').title()}")
             st.dataframe(df)
     
-    # Fetch Metrics Button
-    if st.button("Fetch Metrics"):
-        async def run_fetch_all():
-            return await fetch_all_quote_data(tickers, selected_data_types)
-        
-        with st.spinner("Fetching metrics..."):
-            results = asyncio.run(run_fetch_all())
-            display_data(results)
+        # Fetch Metrics Button
+        if st.button("Fetch Metrics"):
+            async def run_fetch_all():
+                return await fetch_all_quote_data(tickers, selected_data_types)
+            
+            with st.spinner("Fetching metrics..."):
+                results = asyncio.run(run_fetch_all())
+                display_data(results)
 
 
 
