@@ -1169,8 +1169,11 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
             st.warning("No data available.")
             return
 
+        if "data" not in st.session_state:
+            st.session_state["data"] = results
+
         combined_data = {}
-        for result in results:
+        for result in st.session_state["data"]:
             if not result:
                 continue
             for key, df in result.items():
