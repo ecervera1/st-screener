@@ -1018,6 +1018,83 @@ if st.sidebar.checkbox('My Portfolio Anlysis', value=False):
 #12.09.2024
 
 # FinViz Integration
+def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds a UI on top of a dataframe to let viewers filter columns
+
+    Args:
+        df (pd.DataFrame): Original dataframe
+
+    Returns:
+        pd.DataFrame: Filtered dataframe
+    """
+    modify = st.checkbox("Add filters")
+
+    if not modify:
+        return df
+
+    df = df.copy()
+
+    # Convert datetimes into a standard format
+    for col in df.columns:
+        if is_object_dtype(df[col]):
+            try:
+                df[col] = pd.to_datetime(df[col])
+            except Exception:
+                pass
+
+        if is_datetime64_any_dtype(df[col]):
+            df[col] = df[col].dt.tz_localize(None)
+
+    modification_container = st.container()
+
+    with modification_container:
+        to_filter_columns = st.multiselect("Filter dataframe on", df.columns)
+        for column in to_filter_columns:
+            left, right = st.columns((1, 20))
+            # Treat columns with < 10 unique values as categorical
+            if is_categorical_dtype(df[column]) or df[column].nunique() < 10:
+                user_cat_input = right.multiselect(
+                    f"Values for {column}",
+                    df[column].unique(),
+                    default=list(df[column].unique()),
+                )
+                df = df[df[column].isin(user_cat_input)]
+            elif is_numeric_dtype(df[column]):
+                _min = float(df[column].min())
+                _max = float(df[column].max())
+                step = (_max - _min) / 100
+                user_num_input = right.slider(
+                    f"Values for {column}",
+                    min_value=_min,
+                    max_value=_max,
+                    value=(_min, _max),
+                    step=step,
+                )
+                df = df[df[column].between(*user_num_input)]
+            elif is_datetime64_any_dtype(df[column]):
+                user_date_input = right.date_input(
+                    f"Values for {column}",
+                    value=(
+                        df[column].min(),
+                        df[column].max(),
+                    ),
+                )
+                if len(user_date_input) == 2:
+                    user_date_input = tuple(map(pd.to_datetime, user_date_input))
+                    start_date, end_date = user_date_input
+                    df = df.loc[df[column].between(start_date, end_date)]
+            else:
+                user_text_input = right.text_input(
+                    f"Substring or regex in {column}",
+                )
+                if user_text_input:
+                    df = df[df[column].astype(str).str.contains(user_text_input)]
+
+    return df
+
+
+# FinViz Integration
 st.sidebar.title("FinViz")
 
 if st.sidebar.checkbox("FinViz Data Viewer"):
@@ -1038,19 +1115,19 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
             if not quote.exists:
                 logging.warning(f"No data found for ticker {ticker}")
                 return None
-    
+
             result = {}
             if "Fundamental Data" in data_types:
                 df = quote.fundamental_df.head(10)
-                df.insert(0, "Ticker", ticker) 
+                df.insert(0, "Ticker", ticker)
                 result["fundamental_data"] = df
             if "News" in data_types:
                 df = quote.outer_news_df.head(10)
-                df.insert(0, "Ticker", ticker) 
+                df.insert(0, "Ticker", ticker)
                 result["outer_news"] = df
             if "Insider Trading" in data_types:
                 df = quote.insider_trading_df
-                df.insert(0, "Ticker", ticker) 
+                df.insert(0, "Ticker", ticker)
                 result["insider_trading"] = df
             if "Outer Ratings" in data_types:
                 df = quote.outer_ratings_df
@@ -1058,83 +1135,28 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
                 result["outer_ratings"] = df
             if "Income Statement" in data_types:
                 df = quote.income_statement_df
-                df.insert(0, "Ticker", ticker)  
+                df.insert(0, "Ticker", ticker)
                 result["income_statement"] = df
-    
+
             return result
         except Exception as e:
             logging.error(f"Error fetching data for {ticker}: {e}")
             return None
-    
+
     async def fetch_all_quote_data(tickers, data_types):
         retry_options = ExponentialRetry(attempts=2)
         async with RetryClient(raise_for_status=False, retry_options=retry_options) as session:
             tasks = [fetch_quote_data(ticker, data_types, session) for ticker in tickers]
             return await asyncio.gather(*tasks, return_exceptions=True)
 
-    # Function to Filter a DataFrame
-    def filter_dataframe(df, unique_key_prefix):
-        """
-        Creates a UI for filtering a DataFrame.
-        Preserves filter state using Streamlit session_state.
-        """
-        if f"{unique_key_prefix}_filtered" not in st.session_state:
-            st.session_state[f"{unique_key_prefix}_filtered"] = df
-        
-        modify = st.checkbox("Add Filters", key=f"{unique_key_prefix}_add_filters", value=False)
-        if not modify:
-            return st.session_state[f"{unique_key_prefix}_filtered"]
-        
-        # Multiselect for columns
-        columns = st.multiselect(
-            "Filter columns:", df.columns, default=df.columns, key=f"{unique_key_prefix}_columns"
-        )
-        filtered_df = df[columns]
-        
-        # Filter rows by column values
-        for column in columns:
-            if pd.api.types.is_numeric_dtype(df[column]):
-                _min = st.number_input(
-                    f"Min value for {column}", 
-                    value=float(df[column].min()), 
-                    key=f"{unique_key_prefix}_{column}_min"
-                )
-                _max = st.number_input(
-                    f"Max value for {column}", 
-                    value=float(df[column].max()), 
-                    key=f"{unique_key_prefix}_{column}_max"
-                )
-                filtered_df = filtered_df[(df[column] >= _min) & (df[column] <= _max)]
-            elif pd.api.types.is_categorical_dtype(df[column]) or df[column].nunique() < 10:
-                options = st.multiselect(
-                    f"Values for {column}", 
-                    df[column].unique(), 
-                    default=df[column].unique(), 
-                    key=f"{unique_key_prefix}_{column}_values"
-                )
-                filtered_df = filtered_df[df[column].isin(options)]
-            else:
-                text_filter = st.text_input(
-                    f"Search in {column}", key=f"{unique_key_prefix}_{column}_search"
-                )
-                if text_filter:
-                    filtered_df = filtered_df[filtered_df[column].str.contains(text_filter, na=False)]
-        
-        st.session_state[f"{unique_key_prefix}_filtered"] = filtered_df
-        return filtered_df
-    
     # Function to Display Data
     def display_data(results):
         if not results:
             st.warning("No data available.")
             return
-        
-        # Store results in session state to preserve across reruns
-        if "data" not in st.session_state:
-            st.session_state.data = results
 
         combined_data = {}
-        for result in st.session_state.data:
+        for result in results:
             if not result:
                 continue
             for key, df in result.items():
@@ -1142,25 +1164,20 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
                     combined_data[key] = df
                 else:
                     combined_data[key] = pd.concat([combined_data[key], df], ignore_index=True)
-        
+
         # Render Data with Filtering UI
         for data_type, df in combined_data.items():
             if df.empty:
                 continue  # Skip empty DataFrames
-            
+
             st.write(f"#### {data_type.replace('_', ' ').title()}")
-            # Apply Filtering UI
-            filtered_df = filter_dataframe(df, unique_key_prefix=data_type)
+            filtered_df = filter_dataframe(df)
             st.dataframe(filtered_df)
 
-            
     # Fetch Metrics Button
     if st.button("Fetch FinViz Metrics"):
-        async def run_fetch_all():
-            return await fetch_all_quote_data(tickers, selected_data_types)
-        
         with st.spinner("Fetching metrics..."):
-            results = asyncio.run(run_fetch_all())
+            results = asyncio.run(fetch_all_quote_data(tickers, selected_data_types))
             display_data(results)
 
 
