@@ -1,22 +1,46 @@
 import streamlit as st
+import yfinance as yf
 import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.patheffects as path_effects
+from datetime import datetime, timedelta
+import re
+from prophet import Prophet
+import numpy as np
+import requests
+from bs4 import BeautifulSoup
+import scipy
+import seaborn as sns
 import asyncio
 from aiohttp_retry import RetryClient, ExponentialRetry
-from datetime import datetime
 
-# Function to fetch quote data for a single ticker
+# Import pyfinviz modules for financial data fetching
+from pyfinviz.quote import Quote  # Used for fetching ticker data
+
+# Custom CSS for UI
+custom_css = """
+<style>
+    .stActionButton button[kind="header"] {
+        visibility: hidden;
+    }
+
+    .stActionButton div[data-testid="stActionButtonIcon"] {
+        visibility: hidden;
+    }
+</style>
+"""
+st.markdown(custom_css, unsafe_allow_html=True)
+
+# Async function to fetch quote data for a single ticker
 async def fetch_quote_data(ticker, session):
     try:
-        from pyfinviz.quote import Quote  # Ensure this is available in your environment
         quote = Quote(ticker=ticker)
         if quote.exists:
             result = {
                 "fundamental_data": [],
                 "outer_ratings": [],
                 "outer_news": [],
-                "income_statement": [],
-                "insider_trading": [],
-                "reuters_income_statement": []
+                "income_statement": []
             }
             for record in quote.fundamental_df.to_dict('records'):
                 record.update({"Ticker": quote.ticker, "CDATE": datetime.now()})
@@ -38,14 +62,14 @@ async def fetch_quote_data(ticker, session):
         st.error(f"Error fetching data for {ticker}: {e}")
         return None
 
-# Function to fetch data for multiple tickers
+# Async function to fetch data for all tickers
 async def fetch_all_quote_data(tickers):
     retry_options = ExponentialRetry(attempts=3)
     async with RetryClient(raise_for_status=False, retry_options=retry_options) as session:
         tasks = [fetch_quote_data(ticker, session) for ticker in tickers]
         return await asyncio.gather(*tasks, return_exceptions=True)
 
-# Function to combine results into DataFrames
+# Combine the fetched data into DataFrames
 def combine_results(results):
     fundamental_data = []
     outer_ratings = []
@@ -64,19 +88,19 @@ def combine_results(results):
         pd.DataFrame(income_statement)
     )
 
-# Function to clean and format data
+# Data cleaning function
 def clean_data(df):
     return df.replace([None, pd.NA], "N/A").fillna("N/A")
 
-# Main Streamlit app
+# Streamlit main application
 def main():
     st.sidebar.title("Navigation")
-    page = st.sidebar.selectbox("Choose a page", ["Home", "Ticker Metrics Dashboard"])
+    page = st.sidebar.selectbox("Choose a page", ["Home", "Ticker Metrics Dashboard", "Portfolio Management", "Financial Forecasting"])
 
     if page == "Home":
         st.title("Welcome to the Financial Dashboard")
-        st.write("Navigate to the 'Ticker Metrics Dashboard' from the sidebar to view ticker-specific metrics.")
-    
+        st.write("Navigate to the other pages from the sidebar to explore the app's features.")
+
     elif page == "Ticker Metrics Dashboard":
         st.title("Ticker Metrics Dashboard")
         
@@ -121,6 +145,18 @@ def main():
             with tabs[3]:
                 st.write("### Income Statement")
                 st.dataframe(income_statement)
+
+    elif page == "Portfolio Management":
+        st.title("Portfolio Management")
+        st.write("Manage your portfolio, analyze allocations, and optimize your investments.")
+        
+        # Add portfolio management functionality here
+
+    elif page == "Financial Forecasting":
+        st.title("Financial Forecasting")
+        st.write("Perform stock price forecasting using historical data and machine learning models.")
+        
+        # Add financial forecasting functionality here
 
 if __name__ == "__main__":
     main()
