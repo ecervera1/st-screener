@@ -1014,15 +1014,12 @@ if st.sidebar.checkbox('My Portfolio Anlysis', value=False):
     
 
 #12.09.2024
-import asyncio
 
 # FinViz Integration
-st.sidebar.title('FinViz')
+st.sidebar.title("FinViz")
 
 if st.sidebar.checkbox("FinViz"):
-    user_input = st.sidebar.text_input("Enter stock tickers (comma-separated):",  "AAPL,MSFT,GOOGL")
-    # ticker_string = ", ".join(tickers)
-    # user_input = st.sidebar.text_input("Enter stock tickers (comma-separated):", ticker_string)
+    user_input = st.sidebar.text_input("Enter stock tickers (comma-separated):", "AAPL,MSFT,GOOGL")
     tickers = [ticker.strip() for ticker in user_input.split(",") if ticker.strip()]
     
     # Data Selection
@@ -1042,100 +1039,71 @@ if st.sidebar.checkbox("FinViz"):
     
             result = {}
             if "Fundamental Data" in data_types:
-                result["fundamental_data"] = quote.fundamental_df.head(10) 
+                df = quote.fundamental_df.head(10)
+                df["Ticker"] = ticker
+                result["fundamental_data"] = df
             if "News" in data_types:
-                result["outer_news"] = quote.outer_news_df.head(10)  # Limit to top 10 news items
+                df = quote.outer_news_df.head(10)
+                df["Ticker"] = ticker
+                result["outer_news"] = df
             if "Insider Trading" in data_types:
-                result["insider_trading"] = quote.insider_trading_df  
+                df = quote.insider_trading_df
+                df["Ticker"] = ticker
+                result["insider_trading"] = df
             if "Outer Ratings" in data_types:
-                result["outer_ratings"] = quote.outer_ratings_df
+                df = quote.outer_ratings_df
+                df["Ticker"] = ticker
+                result["outer_ratings"] = df
             if "Income Statement" in data_types:
-                result["income_statement"] = quote.income_statement_df
+                df = quote.income_statement_df
+                df["Ticker"] = ticker
+                result["income_statement"] = df
     
-            return {"ticker": ticker, **result}
+            return result
         except Exception as e:
             logging.error(f"Error fetching data for {ticker}: {e}")
             return None
     
     async def fetch_all_quote_data(tickers, data_types):
-        retry_options = ExponentialRetry(attempts=2)  # Retry on failure
+        retry_options = ExponentialRetry(attempts=2)
         async with RetryClient(raise_for_status=False, retry_options=retry_options) as session:
             tasks = [fetch_quote_data(ticker, data_types, session) for ticker in tickers]
             return await asyncio.gather(*tasks, return_exceptions=True)
     
-    # Function to Process and Display Data
+    # Function to Concatenate and Display Data
     def display_data(results):
         if not results:
             st.warning("No data available.")
             return
-    
+        
+        # Concatenate Data for Each Data Type
+        combined_data = {}
         for result in results:
             if not result:
                 continue
-    
-            ticker = result["ticker"]
-            st.subheader(f"{ticker}:")
-    
-            # Display Fundamental Data
-            if "fundamental_data" in result:
-                st.write("#### Fundamental Data")
-                st.dataframe(result["fundamental_data"])
-    
-            # Display News
-            # if "outer_news" in result:
-            #     st.write("#### Latest News")
-            #     st.dataframe(result["outer_news"])
-            # Display News
-            if "outer_news" in result:
-                st.write("#### Latest News")
-                
-                news_df = result["outer_news"]
-                if not news_df.empty:
-                    # Iterate through the DataFrame and display headlines with hyperlinks
-                    for index, row in news_df.iterrows():
-                        headline = row["Headline"]
-                        url = row["URL"]
-                        # Display the headline as a hyperlink
-                        st.markdown(f"{index + 1}. - [{headline}]({url})")
+            for key, df in result.items():
+                if key not in combined_data:
+                    combined_data[key] = df
                 else:
-                    st.markdown("No news available for this ticker.")
-
-    
-            # Display Insider Trading
-            # if "insider_trading" in result:
-            #     st.write("#### Insider Trading")
-            #     insider_summary = result["insider_trading"].groupby("Type")["Shares"].sum()
-            #     st.bar_chart(insider_summary)
-
-            if "insider_trading" in result:
-                st.write("#### Insider Trading")
-                insider_df = result["insider_trading"]
-                if insider_df.empty:
-                    st.write("No insider trading data available.")
-                else:
-                    # Display the insider trading data as a table
-                    st.dataframe(insider_df)
-
-
-    
-            # Display Outer Ratings
-            if "outer_ratings" in result:
-                st.write("#### Outer Ratings")
-                st.dataframe(result["outer_ratings"])
-    
-            # Display Income Statement
-            if "income_statement" in result:
-                st.write("#### Income Statement")
-                st.dataframe(result["income_statement"])
+                    combined_data[key] = pd.concat([combined_data[key], df])
+        
+        # Add Filter for Tickers
+        selected_ticker = st.sidebar.selectbox("Filter by Ticker:", ["All"] + tickers)
+        for data_type, df in combined_data.items():
+            if selected_ticker != "All":
+                df = df[df["Ticker"] == selected_ticker]
+            st.write(f"#### {data_type.replace('_', ' ').title()}")
+            st.dataframe(df)
     
     # Fetch Metrics Button
     if st.button("Fetch Metrics"):
         async def run_fetch_all():
             return await fetch_all_quote_data(tickers, selected_data_types)
-
+        
         with st.spinner("Fetching metrics..."):
-            results = asyncio.run(run_fetch_all())  # Use asyncio.run to execute the async function
+            results = asyncio.run(run_fetch_all())
             display_data(results)
+
 
 
     
