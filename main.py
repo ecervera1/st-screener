@@ -1091,22 +1091,25 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
         
         # Render Ticker Filter Above Data
         st.write("### Filter Data by Ticker")
+        selected_ticker = st.selectbox("Filter by Ticker:", ["All"] + tickers)
+        
         for data_type, df in combined_data.items():
-                    if df.empty:
-                        continue  # Skip empty DataFrames
-                    
-                    if "Ticker" not in df.columns:
-                        st.warning(f"No 'Ticker' column found in {data_type} data. Skipping filtering.")
-                        continue
-                    
-                    st.write(f"#### {data_type.replace('_', ' ').title()}")
-                    # Use Streamlit's filter UI
-                    filtered_df = st.experimental_data_editor(
-                        df, 
-                        num_rows="dynamic",
-                        use_container_width=True,
-                    )
-                    st.dataframe(filtered_df)
+            if df.empty:
+                continue  # Skip empty DataFrames
+            
+            if "Ticker" not in df.columns:
+                st.warning(f"No 'Ticker' column found in {data_type} data. Skipping filtering.")
+                continue
+            
+            # Apply Filter
+            filtered_df = df if selected_ticker == "All" else df[df["Ticker"] == selected_ticker]
+            
+            # Display Filtered Data
+            if filtered_df.empty:
+                st.write(f"No data available for {selected_ticker} in {data_type.replace('_', ' ').title()}.")
+            else:
+                st.write(f"#### {data_type.replace('_', ' ').title()}")
+                st.dataframe(filtered_df)
     
     # Fetch Metrics Button
     if st.button("Fetch FinViz Metrics"):
