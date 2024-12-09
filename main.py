@@ -1014,6 +1014,8 @@ if st.sidebar.checkbox('My Portfolio Anlysis', value=False):
     
 
 #12.09.2024
+st.sidebar.title('FinViz')
+
 if st.sidebar.checkbox("FinViz"):
     user_input = st.sidebar.text_input("Enter stock tickers (comma-separated):", "AAPL,MSFT,GOOGL")
     tickers = [ticker.strip() for ticker in user_input.split(",") if ticker.strip()]
