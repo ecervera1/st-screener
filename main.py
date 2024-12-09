@@ -1020,14 +1020,7 @@ if st.sidebar.checkbox('My Portfolio Anlysis', value=False):
 # FinViz Integration
 st.sidebar.title("FinViz")
 
-#12.09.2024
-import asyncio
-import pandas as pd
-
-# FinViz Integration
-st.title("FinViz Data Viewer")
-
-if st.sidebar.checkbox("Enable FinViz Data Viewer"):
+if st.sidebar.checkbox("FinViz Data Viewer"):
     user_input = st.sidebar.text_input("Enter stock tickers (comma-separated):", "AAPL,MSFT,GOOGL")
     tickers = [ticker.strip() for ticker in user_input.split(",") if ticker.strip()]
     
