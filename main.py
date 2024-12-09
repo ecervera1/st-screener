@@ -1018,17 +1018,19 @@ if st.sidebar.checkbox('My Portfolio Anlysis', value=False):
 #12.09.2024
 
 # FinViz Integration
-def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+
+def filter_dataframe(df: pd.DataFrame, unique_key_prefix: str) -> pd.DataFrame:
     """
     Adds a UI on top of a dataframe to let viewers filter columns
 
     Args:
         df (pd.DataFrame): Original dataframe
+        unique_key_prefix (str): Unique prefix for widget keys
 
     Returns:
         pd.DataFrame: Filtered dataframe
     """
-    modify = st.checkbox("Add filters")
+    modify = st.checkbox("Add filters", key=f"{unique_key_prefix}_modify")
 
     if not modify:
         return df
@@ -1049,7 +1051,9 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     modification_container = st.container()
 
     with modification_container:
-        to_filter_columns = st.multiselect("Filter dataframe on", df.columns)
+        to_filter_columns = st.multiselect(
+            "Filter dataframe on", df.columns, key=f"{unique_key_prefix}_filter_columns"
+        )
         for column in to_filter_columns:
             left, right = st.columns((1, 20))
             # Treat columns with < 10 unique values as categorical
@@ -1058,6 +1062,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
                     f"Values for {column}",
                     df[column].unique(),
                     default=list(df[column].unique()),
+                    key=f"{unique_key_prefix}_{column}_categories",
                 )
                 df = df[df[column].isin(user_cat_input)]
             elif is_numeric_dtype(df[column]):
@@ -1070,6 +1075,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
                     max_value=_max,
                     value=(_min, _max),
                     step=step,
+                    key=f"{unique_key_prefix}_{column}_numeric",
                 )
                 df = df[df[column].between(*user_num_input)]
             elif is_datetime64_any_dtype(df[column]):
@@ -1079,6 +1085,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
                         df[column].min(),
                         df[column].max(),
                     ),
+                    key=f"{unique_key_prefix}_{column}_dates",
                 )
                 if len(user_date_input) == 2:
                     user_date_input = tuple(map(pd.to_datetime, user_date_input))
@@ -1087,6 +1094,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
             else:
                 user_text_input = right.text_input(
                     f"Substring or regex in {column}",
+                    key=f"{unique_key_prefix}_{column}_text",
                 )
                 if user_text_input:
                     df = df[df[column].astype(str).str.contains(user_text_input)]
@@ -1171,7 +1179,7 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
                 continue  # Skip empty DataFrames
 
             st.write(f"#### {data_type.replace('_', ' ').title()}")
-            filtered_df = filter_dataframe(df)
+            filtered_df = filter_dataframe(df, unique_key_prefix=data_type)
             st.dataframe(filtered_df)
 
     # Fetch Metrics Button
@@ -1179,7 +1187,6 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
         with st.spinner("Fetching metrics..."):
             results = asyncio.run(fetch_all_quote_data(tickers, selected_data_types))
             display_data(results)
-
 
 
 
