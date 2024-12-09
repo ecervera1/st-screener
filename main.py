@@ -55,12 +55,13 @@ def generate_prophet_forecast(ticker, start_date, end_date, forecast_days=365):
 
     # Prepare data for Prophet
     phdata = pdata.reset_index()
-    st.write(phdata.head())
-    phdata = phdata[['Date', 'Adj Close']].rename(columns={'Date': 'ds', 'Adj Close': 'y'})
+    phdata = phdata[['Date', 'Close']].rename(columns={'Date': 'ds', 'Close': 'y'})
 
     # Ensure the `y` column is numeric and drop invalid rows
     phdata['y'] = pd.to_numeric(phdata['y'], errors='coerce')
     phdata = phdata.dropna(subset=['y'])
+
+    st.write(phdata.head())
 
     if phdata.empty:
         st.error(f"No valid price data for {ticker} after preprocessing.")
