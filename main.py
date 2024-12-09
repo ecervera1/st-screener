@@ -1015,7 +1015,6 @@ if st.sidebar.checkbox('My Portfolio Anlysis', value=False):
 
 #12.09.2024
 import asyncio
-
 # FinViz Integration
 st.sidebar.title('FinViz')
 
