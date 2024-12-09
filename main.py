@@ -1072,7 +1072,7 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
             tasks = [fetch_quote_data(ticker, data_types, session) for ticker in tickers]
             return await asyncio.gather(*tasks, return_exceptions=True)
 
-        def filter_dataframe(df, unique_key_prefix):
+    def filter_dataframe(df, unique_key_prefix):
         """
         Creates a UI for filtering a DataFrame.
         Preserves filter state using Streamlit session_state.
