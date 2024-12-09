@@ -46,12 +46,16 @@ def generate_prophet_forecast(ticker, start_date, end_date, forecast_days=365):
     # Load historical stock data
     pdata = yf.download(ticker, start=start_date, end=end_date, progress=False)
 
+    st.write(pdata.head())
+
+
     if pdata.empty:
         st.error(f"No data available for {ticker} in the specified date range.")
         return None
 
     # Prepare data for Prophet
     phdata = pdata.reset_index()
+    st.write(phdata.head())
     phdata = phdata[['Date', 'Adj Close']].rename(columns={'Date': 'ds', 'Adj Close': 'y'})
 
     # Ensure the `y` column is numeric and drop invalid rows
