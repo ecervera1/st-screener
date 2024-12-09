@@ -100,7 +100,7 @@ def calculate_parameters(data):
     return mean_return, sigma
 
 # Function for Monte Carlo simulation
-def monte_carlo_simulation(data, num_simulations=1000000, forecast_days=252):
+def monte_carlo_simulation(data, num_simulations=500000, forecast_days=252):
     mean_return, sigma = calculate_parameters(data)
     final_prices = np.zeros(num_simulations)
     initial_price = data.iloc[-1]
