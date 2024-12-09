@@ -1042,23 +1042,23 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
             result = {}
             if "Fundamental Data" in data_types:
                 df = quote.fundamental_df.head(10)
-                df.insert(0, "Ticker", ticker)  # Insert Ticker as the first column
+                df.insert(0, "Ticker", ticker) 
                 result["fundamental_data"] = df
             if "News" in data_types:
                 df = quote.outer_news_df.head(10)
-                df.insert(0, "Ticker", ticker)  # Insert Ticker as the first column
+                df.insert(0, "Ticker", ticker) 
                 result["outer_news"] = df
             if "Insider Trading" in data_types:
                 df = quote.insider_trading_df
-                df.insert(0, "Ticker", ticker)  # Insert Ticker as the first column
+                df.insert(0, "Ticker", ticker) 
                 result["insider_trading"] = df
             if "Outer Ratings" in data_types:
                 df = quote.outer_ratings_df
-                df.insert(0, "Ticker", ticker)  # Insert Ticker as the first column
+                df.insert(0, "Ticker", ticker)
                 result["outer_ratings"] = df
             if "Income Statement" in data_types:
                 df = quote.income_statement_df
-                df.insert(0, "Ticker", ticker)  # Insert Ticker as the first column
+                df.insert(0, "Ticker", ticker)  
                 result["income_statement"] = df
     
             return result
