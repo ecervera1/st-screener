@@ -46,12 +46,15 @@ def generate_prophet_forecast(ticker, start_date, end_date, forecast_days=365):
     # Load historical stock data
     pdata = yf.download(ticker, start=start_date, end=end_date, progress=False)
 
-    st.write(pdata.head())
+    # st.write(pdata.head())
 
 
     if pdata.empty:
         st.error(f"No data available for {ticker} in the specified date range.")
         return None
+
+    if isinstance(pdata.columns, pd.MultiIndex):
+        pdata = pdata.xs(ticker, level=1, axis=1
 
     # Prepare data for Prophet
     phdata = pdata.reset_index()
