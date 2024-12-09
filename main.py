@@ -1028,7 +1028,7 @@ if st.sidebar.checkbox('My Portfolio Anlysis', value=False):
 # Function to filter a DataFrame
 def filter_dataframe(df: pd.DataFrame, unique_key_prefix: str) -> pd.DataFrame:
     """
-    Adds a UI on top of a dataframe to let viewers filter columns.
+    Adds a filtering UI always visible for a dataframe.
 
     Args:
         df (pd.DataFrame): Original dataframe
@@ -1037,11 +1037,6 @@ def filter_dataframe(df: pd.DataFrame, unique_key_prefix: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Filtered dataframe
     """
-    modify = st.checkbox("Add filters", key=f"{unique_key_prefix}_modify", value=False)
-
-    if not modify:
-        return df
-
     df = df.copy()
 
     # Convert datetimes into a standard format
@@ -1058,6 +1053,7 @@ def filter_dataframe(df: pd.DataFrame, unique_key_prefix: str) -> pd.DataFrame:
     modification_container = st.container()
 
     with modification_container:
+        st.write("### Filter Options")
         to_filter_columns = st.multiselect(
             "Filter dataframe on", df.columns, key=f"{unique_key_prefix}_filter_columns"
         )
