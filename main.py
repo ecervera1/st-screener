@@ -1175,14 +1175,13 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
                 else:
                     combined_data[key] = pd.concat([combined_data[key], df], ignore_index=True)
 
-        # Render Data with Filtering UI
+        # Render Data Without Filtering
         for data_type, df in combined_data.items():
             if df.empty:
                 continue  # Skip empty DataFrames
 
             st.write(f"#### {data_type.replace('_', ' ').title()}")
-            filtered_df = filter_dataframe(df, unique_key_prefix=data_type)
-            st.dataframe(filtered_df)
+            st.dataframe(df)  # Display unfiltered data
 
     # Fetch Metrics Button
     if st.button("Fetch FinViz Metrics"):
