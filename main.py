@@ -1071,31 +1071,48 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
         async with RetryClient(raise_for_status=False, retry_options=retry_options) as session:
             tasks = [fetch_quote_data(ticker, data_types, session) for ticker in tickers]
             return await asyncio.gather(*tasks, return_exceptions=True)
-    def filter_dataframe(df):
+    def filter_dataframe(df, unique_key_prefix):
         """
         Creates a UI for filtering a DataFrame.
+        Ensures unique Streamlit widget keys.
         Returns the filtered DataFrame.
         """
-        # Create Streamlit widgets for filtering columns
-        modify = st.checkbox("Add Filters")
+        modify = st.checkbox("Add Filters", key=f"{unique_key_prefix}_add_filters")
         if not modify:
             return df
         
         # Multiselect for columns
-        columns = st.multiselect("Filter columns:", df.columns, default=df.columns)
+        columns = st.multiselect(
+            "Filter columns:", df.columns, default=df.columns, key=f"{unique_key_prefix}_columns"
+        )
+        filtered_df = df[columns]
         
         # Filter rows by column values
-        filtered_df = df[columns]
         for column in columns:
             if pd.api.types.is_numeric_dtype(df[column]):
-                _min = st.number_input(f"Min value for {column}", value=float(df[column].min()))
-                _max = st.number_input(f"Max value for {column}", value=float(df[column].max()))
+                _min = st.number_input(
+                    f"Min value for {column}", 
+                    value=float(df[column].min()), 
+                    key=f"{unique_key_prefix}_{column}_min"
+                )
+                _max = st.number_input(
+                    f"Max value for {column}", 
+                    value=float(df[column].max()), 
+                    key=f"{unique_key_prefix}_{column}_max"
+                )
                 filtered_df = filtered_df[(df[column] >= _min) & (df[column] <= _max)]
             elif pd.api.types.is_categorical_dtype(df[column]) or df[column].nunique() < 10:
-                options = st.multiselect(f"Values for {column}", df[column].unique(), default=df[column].unique())
+                options = st.multiselect(
+                    f"Values for {column}", 
+                    df[column].unique(), 
+                    default=df[column].unique(), 
+                    key=f"{unique_key_prefix}_{column}_values"
+                )
                 filtered_df = filtered_df[df[column].isin(options)]
             else:
-                text_filter = st.text_input(f"Search in {column}")
+                text_filter = st.text_input(
+                    f"Search in {column}", key=f"{unique_key_prefix}_{column}_search"
+                )
                 if text_filter:
                     filtered_df = filtered_df[filtered_df[column].str.contains(text_filter, na=False)]
         
@@ -1125,8 +1142,9 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
             
             st.write(f"#### {data_type.replace('_', ' ').title()}")
             # Apply Filtering UI
-            filtered_df = filter_dataframe(df)
+            filtered_df = filter_dataframe(df, unique_key_prefix=data_type)
             st.dataframe(filtered_df)
+            
     # Fetch Metrics Button
     if st.button("Fetch FinViz Metrics"):
         async def run_fetch_all():
