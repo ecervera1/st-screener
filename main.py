@@ -1015,11 +1015,14 @@ if st.sidebar.checkbox('My Portfolio Anlysis', value=False):
 
 #12.09.2024
 import asyncio
+
 # FinViz Integration
 st.sidebar.title('FinViz')
 
 if st.sidebar.checkbox("FinViz"):
-    user_input = st.sidebar.text_input("Enter stock tickers (comma-separated):", "AAPL,MSFT,GOOGL")
+    user_input = st.sidebar.text_input("Enter stock tickers (comma-separated):",  "AAPL,MSFT,GOOGL")
+    # ticker_string = ", ".join(tickers)
+    # user_input = st.sidebar.text_input("Enter stock tickers (comma-separated):", ticker_string)
     tickers = [ticker.strip() for ticker in user_input.split(",") if ticker.strip()]
     
     # Data Selection
@@ -1034,16 +1037,16 @@ if st.sidebar.checkbox("FinViz"):
         try:
             quote = Quote(ticker=ticker)
             if not quote.exists:
-                st.warning(f"No data found for ticker {ticker}")
+                logging.warning(f"No data found for ticker {ticker}")
                 return None
     
             result = {}
             if "Fundamental Data" in data_types:
-                result["fundamental_data"] = quote.fundamental_df.head(1)  # Show only the latest row
+                result["fundamental_data"] = quote.fundamental_df.head(10) 
             if "News" in data_types:
-                result["outer_news"] = quote.outer_news_df.head(5)  # Limit to top 5 news items
+                result["outer_news"] = quote.outer_news_df.head(10)  # Limit to top 10 news items
             if "Insider Trading" in data_types:
-                result["insider_trading"] = quote.insider_trading_df  # Show all insider data
+                result["insider_trading"] = quote.insider_trading_df  
             if "Outer Ratings" in data_types:
                 result["outer_ratings"] = quote.outer_ratings_df
             if "Income Statement" in data_types:
@@ -1051,7 +1054,7 @@ if st.sidebar.checkbox("FinViz"):
     
             return {"ticker": ticker, **result}
         except Exception as e:
-            st.error(f"Error fetching data for {ticker}: {e}")
+            logging.error(f"Error fetching data for {ticker}: {e}")
             return None
     
     async def fetch_all_quote_data(tickers, data_types):
@@ -1060,97 +1063,71 @@ if st.sidebar.checkbox("FinViz"):
             tasks = [fetch_quote_data(ticker, data_types, session) for ticker in tickers]
             return await asyncio.gather(*tasks, return_exceptions=True)
     
-    # Consolidate the results into a single DataFrame
-    def consolidate_results(results):
-        consolidated_data = []
-
+    # Function to Process and Display Data
+    def display_data(results):
+        if not results:
+            st.warning("No data available.")
+            return
+    
         for result in results:
             if not result:
                 continue
-
+    
             ticker = result["ticker"]
+            st.subheader(f"{ticker}:")
+    
+            # Display Fundamental Data
+            if "fundamental_data" in result:
+                st.write("#### Fundamental Data")
+                st.dataframe(result["fundamental_data"])
+    
+            # Display News
+            # if "outer_news" in result:
+            #     st.write("#### Latest News")
+            #     st.dataframe(result["outer_news"])
+            # Display News
+            if "outer_news" in result:
+                st.write("#### Latest News")
+                
+                news_df = result["outer_news"]
+                if not news_df.empty:
+                    # Iterate through the DataFrame and display headlines with hyperlinks
+                    for index, row in news_df.iterrows():
+                        headline = row["Headline"]
+                        url = row["URL"]
+                        # Display the headline as a hyperlink
+                        st.markdown(f"{index + 1}. - [{headline}]({url})")
+                else:
+                    st.markdown("No news available for this ticker.")
 
-            # Add Fundamental Data
-            if "fundamental_data" in result and not result["fundamental_data"].empty:
-                df = result["fundamental_data"].copy()
-                df["Ticker"] = ticker
-                df["DataType"] = "Fundamental Data"
-                consolidated_data.append(df)
+    
+            # Display Insider Trading
+            # if "insider_trading" in result:
+            #     st.write("#### Insider Trading")
+            #     insider_summary = result["insider_trading"].groupby("Type")["Shares"].sum()
+            #     st.bar_chart(insider_summary)
 
-            # Add News
-            if "outer_news" in result and not result["outer_news"].empty:
-                df = result["outer_news"].copy()
-                df["Ticker"] = ticker
-                df["DataType"] = "Latest News"
-                consolidated_data.append(df)
+            if "insider_trading" in result:
+                st.write("#### Insider Trading")
+                insider_df = result["insider_trading"]
+                if insider_df.empty:
+                    st.write("No insider trading data available.")
+                else:
+                    # Display the insider trading data as a table
+                    st.dataframe(insider_df)
 
-            # Add Insider Trading
-            if "insider_trading" in result and not result["insider_trading"].empty:
-                df = result["insider_trading"].copy()
-                df["Ticker"] = ticker
-                df["DataType"] = "Insider Trading"
-                consolidated_data.append(df)
 
-            # Add Outer Ratings
-            if "outer_ratings" in result and not result["outer_ratings"].empty:
-                df = result["outer_ratings"].copy()
-                df["Ticker"] = ticker
-                df["DataType"] = "Outer Ratings"
-                consolidated_data.append(df)
-
-            # Add Income Statement
-            if "income_statement" in result and not result["income_statement"].empty:
-                df = result["income_statement"].copy()
-                df["Ticker"] = ticker
-                df["DataType"] = "Income Statement"
-                consolidated_data.append(df)
-
-        # Concatenate only non-empty DataFrames
-        if consolidated_data:
-            consolidated_df = pd.concat(consolidated_data, ignore_index=True)
-
-            # Fill missing values with an empty string for better display
-            consolidated_df.fillna("", inplace=True)
-
-            return consolidated_df
-        else:
-            return pd.DataFrame()
-
-    # Function to Process and Display Data
-    def display_consolidated_data(results):
-        # Consolidate the data
-        consolidated_df = consolidate_results(results)
-
-        if consolidated_df.empty:
-            st.warning("No data available.")
-            return
-
-        # Sidebar filters
-        tickers = st.sidebar.multiselect(
-            "Select Tickers:",
-            consolidated_df["Ticker"].unique(),
-            default=list(consolidated_df["Ticker"].unique())
-        )
-        data_types = st.sidebar.multiselect(
-            "Select Data Types:",
-            consolidated_df["DataType"].unique(),
-            default=list(consolidated_df["DataType"].unique())
-        )
-        columns = st.sidebar.multiselect(
-            "Select Columns to Display:",
-            consolidated_df.columns,
-            default=list(consolidated_df.columns)
-        )
-
-        # Apply filters
-        filtered_df = consolidated_df[
-            (consolidated_df["Ticker"].isin(tickers)) &
-            (consolidated_df["DataType"].isin(data_types))
-        ]
-
-        # Display the filtered DataFrame
-        st.dataframe(filtered_df[columns])
-
+    
+            # Display Outer Ratings
+            if "outer_ratings" in result:
+                st.write("#### Outer Ratings")
+                st.dataframe(result["outer_ratings"])
+    
+            # Display Income Statement
+            if "income_statement" in result:
+                st.write("#### Income Statement")
+                st.dataframe(result["income_statement"])
+    
     # Fetch Metrics Button
     if st.button("Fetch Metrics"):
         async def run_fetch_all():
@@ -1158,8 +1135,7 @@ if st.sidebar.checkbox("FinViz"):
 
         with st.spinner("Fetching metrics..."):
             results = asyncio.run(run_fetch_all())  # Use asyncio.run to execute the async function
-            display_consolidated_data(results)
-
+            display_data(results)
 
 
     
