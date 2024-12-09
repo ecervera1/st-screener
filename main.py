@@ -1025,9 +1025,10 @@ if st.sidebar.checkbox('My Portfolio Anlysis', value=False):
 
 # FinViz Integration
 
+# Function to filter a DataFrame
 def filter_dataframe(df: pd.DataFrame, unique_key_prefix: str) -> pd.DataFrame:
     """
-    Adds a UI on top of a dataframe to let viewers filter columns
+    Adds a UI on top of a dataframe to let viewers filter columns.
 
     Args:
         df (pd.DataFrame): Original dataframe
@@ -1036,7 +1037,7 @@ def filter_dataframe(df: pd.DataFrame, unique_key_prefix: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Filtered dataframe
     """
-    modify = st.checkbox("Add filters", key=f"{unique_key_prefix}_modify")
+    modify = st.checkbox("Add filters", key=f"{unique_key_prefix}_modify", value=False)
 
     if not modify:
         return df
@@ -1165,10 +1166,6 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
 
     # Function to Display Data
     def display_data(results):
-        if not results:
-            st.warning("No data available.")
-            return
-
         if "data" not in st.session_state:
             st.session_state["data"] = results
 
@@ -1193,19 +1190,8 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
 
     # Fetch Metrics Button
     if st.button("Fetch FinViz Metrics"):
-        with st.spinner("Fetching metrics..."):
-            results = asyncio.run(fetch_all_quote_data(tickers, selected_data_types))
-            display_data(results)
-
-
-
-    
-        
-
-
-
-
-
-
-
-    
+        if "data" not in st.session_state:
+            with st.spinner("Fetching metrics..."):
+                results = asyncio.run(fetch_all_quote_data(tickers, selected_data_types))
+                st.session_state["data"] = results
+        display_data(st.session_state["data"])
