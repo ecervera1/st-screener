@@ -1072,11 +1072,6 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
             tasks = [fetch_quote_data(ticker, data_types, session) for ticker in tickers]
             return await asyncio.gather(*tasks, return_exceptions=True)
     def filter_dataframe(df, unique_key_prefix):
-        """
-        Creates a UI for filtering a DataFrame.
-        Ensures unique Streamlit widget keys.
-        Returns the filtered DataFrame.
-        """
         modify = st.checkbox("Add Filters", key=f"{unique_key_prefix}_add_filters")
         if not modify:
             return df
@@ -1124,9 +1119,12 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
             st.warning("No data available.")
             return
         
-        # Concatenate Data for Each Data Type
+        # Store results in session state to preserve across reruns
+        if "data" not in st.session_state:
+            st.session_state.data = results
+
         combined_data = {}
-        for result in results:
+        for result in st.session_state.data:
             if not result:
                 continue
             for key, df in result.items():
@@ -1144,6 +1142,7 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
             # Apply Filtering UI
             filtered_df = filter_dataframe(df, unique_key_prefix=data_type)
             st.dataframe(filtered_df)
+
             
     # Fetch Metrics Button
     if st.button("Fetch FinViz Metrics"):
