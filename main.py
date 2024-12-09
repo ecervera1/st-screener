@@ -46,7 +46,7 @@ def generate_prophet_forecast(ticker, start_date, end_date, forecast_days=365):
     # Load historical stock data
     pdata = yf.download(ticker, start=start_date, end=end_date, progress=False)
 
-    # st.write(pdata.head())
+    # st.write(pdata.head())                #Debug
 
 
     if pdata.empty:
@@ -59,7 +59,7 @@ def generate_prophet_forecast(ticker, start_date, end_date, forecast_days=365):
     # Prepare data for Prophet
     phdata = pdata.reset_index()
     phdata = phdata[['Date', 'Close']].rename(columns={'Date': 'ds', 'Close': 'y'})
-    st.write(phdata.head())
+    # st.write(phdata.head())                #Debug
 
     
     # Ensure the `y` column is numeric and drop invalid rows
