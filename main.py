@@ -1014,6 +1014,9 @@ if st.sidebar.checkbox('My Portfolio Anlysis', value=False):
     
 
 #12.09.2024
+import asyncio
+
+# FinViz Integration
 st.sidebar.title('FinViz')
 
 if st.sidebar.checkbox("FinViz"):
@@ -1099,13 +1102,13 @@ if st.sidebar.checkbox("FinViz"):
     
     # Fetch Metrics Button
     if st.button("Fetch Metrics"):
+        async def run_fetch_all():
+            return await fetch_all_quote_data(tickers, selected_data_types)
+
         with st.spinner("Fetching metrics..."):
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            results = loop.run_until_complete(fetch_all_quote_data(tickers, selected_data_types))
-            loop.close()
-    
+            results = asyncio.run(run_fetch_all())  # Use asyncio.run to execute the async function
             display_data(results)
+
 
 
     
