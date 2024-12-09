@@ -227,11 +227,7 @@ st.sidebar.title('Input Parameters')
 
 # Input for stock tickers
 # user_input = st.sidebar.text_input("Enter stock tickers separated by commas", "LLY, ABT, MRNA, JNJ, BIIB, BMY, PFE, NVO, UNH, ISRG, GEHC")
-user_input = st.sidebar.text_input("Enter stock tickers separated by commas", 
-    "TQQQ, WMT, T, MSTY, TSLA, NFLX, META, AXP, LLY, UPST, SPY, C, ARR, SPXL, COST, ARM, VZ, PK, MSFT, MMM, M, 
-    UNH, QQQ, NVDA, JEPQ, LMT, ATO, PM, SCHD, SPG, O, JEPI, GILD, AAPL, CI, XYLD, ABT, HGV, SHEL, BUD, ABNB, 
-   NVDY, TM, CVX, XOM, MHO, FDX, NVO, F, CONY, TSLS, ZETA, ASML, BIIB, PFE, FIAT, MRNA, QQQY, TSLY"
-)
+user_input = st.sidebar.text_input("Enter stock tickers separated by commas", "TQQQ, WMT, T, MSTY, TSLA, NFLX, META, AXP, LLY, UPST, SPY, C, ARR, SPXL, COST, ARM, VZ, PK, MSFT, MMM, M, UNH, QQQ, NVDA, JEPQ, LMT, ATO, PM, SCHD, SPG, O, JEPI, GILD, AAPL, CI, XYLD, ABT, HGV, SHEL, BUD, ABNB, NVDY, TM, CVX, XOM, MHO, FDX, NVO, F, CONY, TSLS, ZETA, ASML, BIIB, PFE, FIAT, MRNA, QQQY, TSLY")
 
 tickers = [ticker.strip() for ticker in user_input.split(',')]
 
