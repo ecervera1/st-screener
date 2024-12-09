@@ -52,7 +52,7 @@ def generate_prophet_forecast(ticker, start_date, end_date, forecast_days=365):
 
     # Prepare data for Prophet
     phdata = pdata.reset_index()
-    phdata = phdata[['Date', 'Close']].rename(columns={'Date': 'ds', 'Close': 'y'})
+    phdata = phdata[['Date', 'Adj Close']].rename(columns={'Date': 'ds', 'Adj Close': 'y'})
 
     # Ensure the `y` column is numeric and drop invalid rows
     phdata['y'] = pd.to_numeric(phdata['y'], errors='coerce')
@@ -872,7 +872,7 @@ def fetch_historical_data(ticker, start_date, end_date):
     try:
         stock_data = yf.download(ticker, start=start_date, end=end_date)
         if not stock_data.empty:
-            return stock_data['Close']
+            return stock_data['Adj Close']
         else:
             return pd.Series()  # Return an empty Series if no data is available
     except Exception as e:
