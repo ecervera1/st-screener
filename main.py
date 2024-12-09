@@ -1072,14 +1072,18 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
             tasks = [fetch_quote_data(ticker, data_types, session) for ticker in tickers]
             return await asyncio.gather(*tasks, return_exceptions=True)
 
+    # Function to Filter a DataFrame
     def filter_dataframe(df, unique_key_prefix):
         """
         Creates a UI for filtering a DataFrame.
         Preserves filter state using Streamlit session_state.
         """
-        modify = st.checkbox("Add Filters", key=f"{unique_key_prefix}_add_filters")
+        if f"{unique_key_prefix}_filtered" not in st.session_state:
+            st.session_state[f"{unique_key_prefix}_filtered"] = df
+        
+        modify = st.checkbox("Add Filters", key=f"{unique_key_prefix}_add_filters", value=False)
         if not modify:
-            return df
+            return st.session_state[f"{unique_key_prefix}_filtered"]
         
         # Multiselect for columns
         columns = st.multiselect(
@@ -1116,6 +1120,7 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
                 if text_filter:
                     filtered_df = filtered_df[filtered_df[column].str.contains(text_filter, na=False)]
         
+        st.session_state[f"{unique_key_prefix}_filtered"] = filtered_df
         return filtered_df
     
     # Function to Display Data
