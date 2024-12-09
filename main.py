@@ -54,7 +54,7 @@ def generate_prophet_forecast(ticker, start_date, end_date, forecast_days=365):
         return None
 
     if isinstance(pdata.columns, pd.MultiIndex):
-        pdata = pdata.xs(ticker, level=1, axis=1
+        pdata = pdata.xs(ticker, level=1, axis=1)
 
     # Prepare data for Prophet
     phdata = pdata.reset_index()
