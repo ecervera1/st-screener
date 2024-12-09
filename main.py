@@ -1035,7 +1035,7 @@ if st.sidebar.checkbox("FinViz"):
         try:
             quote = Quote(ticker=ticker)
             if not quote.exists:
-                logging.warning(f"No data found for ticker {ticker}")
+                st.warning(f"No data found for ticker {ticker}")
                 return None
     
             result = {}
@@ -1052,7 +1052,7 @@ if st.sidebar.checkbox("FinViz"):
     
             return {"ticker": ticker, **result}
         except Exception as e:
-            logging.error(f"Error fetching data for {ticker}: {e}")
+            st.error(f"Error fetching data for {ticker}: {e}")
             return None
     
     async def fetch_all_quote_data(tickers, data_types):
@@ -1062,61 +1062,60 @@ if st.sidebar.checkbox("FinViz"):
             return await asyncio.gather(*tasks, return_exceptions=True)
     
     # Consolidate the results into a single DataFrame
-   def consolidate_results(results):
-    consolidated_data = []
+    def consolidate_results(results):
+        consolidated_data = []
 
-    for result in results:
-        if not result:
-            continue
+        for result in results:
+            if not result:
+                continue
 
-        ticker = result["ticker"]
+            ticker = result["ticker"]
 
-        # Add Fundamental Data
-        if "fundamental_data" in result and not result["fundamental_data"].empty:
-            df = result["fundamental_data"].copy()
-            df["Ticker"] = ticker
-            df["DataType"] = "Fundamental Data"
-            consolidated_data.append(df)
+            # Add Fundamental Data
+            if "fundamental_data" in result and not result["fundamental_data"].empty:
+                df = result["fundamental_data"].copy()
+                df["Ticker"] = ticker
+                df["DataType"] = "Fundamental Data"
+                consolidated_data.append(df)
 
-        # Add News
-        if "outer_news" in result and not result["outer_news"].empty:
-            df = result["outer_news"].copy()
-            df["Ticker"] = ticker
-            df["DataType"] = "Latest News"
-            consolidated_data.append(df)
+            # Add News
+            if "outer_news" in result and not result["outer_news"].empty:
+                df = result["outer_news"].copy()
+                df["Ticker"] = ticker
+                df["DataType"] = "Latest News"
+                consolidated_data.append(df)
 
-        # Add Insider Trading
-        if "insider_trading" in result and not result["insider_trading"].empty:
-            df = result["insider_trading"].copy()
-            df["Ticker"] = ticker
-            df["DataType"] = "Insider Trading"
-            consolidated_data.append(df)
+            # Add Insider Trading
+            if "insider_trading" in result and not result["insider_trading"].empty:
+                df = result["insider_trading"].copy()
+                df["Ticker"] = ticker
+                df["DataType"] = "Insider Trading"
+                consolidated_data.append(df)
 
-        # Add Outer Ratings
-        if "outer_ratings" in result and not result["outer_ratings"].empty:
-            df = result["outer_ratings"].copy()
-            df["Ticker"] = ticker
-            df["DataType"] = "Outer Ratings"
-            consolidated_data.append(df)
+            # Add Outer Ratings
+            if "outer_ratings" in result and not result["outer_ratings"].empty:
+                df = result["outer_ratings"].copy()
+                df["Ticker"] = ticker
+                df["DataType"] = "Outer Ratings"
+                consolidated_data.append(df)
 
-        # Add Income Statement
-        if "income_statement" in result and not result["income_statement"].empty:
-            df = result["income_statement"].copy()
-            df["Ticker"] = ticker
-            df["DataType"] = "Income Statement"
-            consolidated_data.append(df)
+            # Add Income Statement
+            if "income_statement" in result and not result["income_statement"].empty:
+                df = result["income_statement"].copy()
+                df["Ticker"] = ticker
+                df["DataType"] = "Income Statement"
+                consolidated_data.append(df)
 
-    # Concatenate only non-empty DataFrames
-    if consolidated_data:
-        consolidated_df = pd.concat(consolidated_data, ignore_index=True)
+        # Concatenate only non-empty DataFrames
+        if consolidated_data:
+            consolidated_df = pd.concat(consolidated_data, ignore_index=True)
 
-        # Fill missing values with an empty string for better display
-        consolidated_df.fillna("", inplace=True)
+            # Fill missing values with an empty string for better display
+            consolidated_df.fillna("", inplace=True)
 
-        return consolidated_df
-    else:
-        return pd.DataFrame()
-
+            return consolidated_df
+        else:
+            return pd.DataFrame()
 
     # Function to Process and Display Data
     def display_consolidated_data(results):
@@ -1131,17 +1130,17 @@ if st.sidebar.checkbox("FinViz"):
         tickers = st.sidebar.multiselect(
             "Select Tickers:",
             consolidated_df["Ticker"].unique(),
-            default=consolidated_df["Ticker"].unique()
+            default=list(consolidated_df["Ticker"].unique())
         )
         data_types = st.sidebar.multiselect(
             "Select Data Types:",
             consolidated_df["DataType"].unique(),
-            default=consolidated_df["DataType"].unique()
+            default=list(consolidated_df["DataType"].unique())
         )
         columns = st.sidebar.multiselect(
             "Select Columns to Display:",
             consolidated_df.columns,
-            default=consolidated_df.columns
+            default=list(consolidated_df.columns)
         )
 
         # Apply filters
