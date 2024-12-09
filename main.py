@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 import requests
 
 # Streamlit settings
-st.set_option('deprecation.showPyplotGlobalUse', False)
+#st.set_option('deprecation.showPyplotGlobalUse', False)
 st.markdown("""
 <style>
     .stActionButton button[kind="header"], .stActionButton div[data-testid="stActionButtonIcon"] {
