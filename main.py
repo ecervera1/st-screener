@@ -17,6 +17,8 @@ from aiohttp_retry import RetryClient, ExponentialRetry
 from pyfinviz.news import News
 from pyfinviz.insider import Insider
 from pyfinviz.quote import Quote
+import asyncio
+
 
 #st.set_option('deprecation.showPyplotGlobalUse', False)
 
