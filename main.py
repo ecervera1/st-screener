@@ -42,28 +42,43 @@ custom_css = """
 st.markdown(custom_css, unsafe_allow_html=True)
 
 # Function to generate Prophet forecast plot for a given stock ticker
-def generate_prophet_forecast(ticker, start_date, end_date):
+def generate_prophet_forecast(ticker, start_date, end_date, forecast_days=365):
     # Load historical stock data
     pdata = yf.download(ticker, start=start_date, end=end_date, progress=False)
 
+    if pdata.empty:
+        st.error(f"No data available for {ticker} in the specified date range.")
+        return None
+
     # Prepare data for Prophet
     phdata = pdata.reset_index()
-    phdata = phdata[['Date', 'Close']]
-    phdata = phdata.rename(columns={'Date': 'ds', 'Close': 'y'})
+    phdata = phdata[['Date', 'Close']].rename(columns={'Date': 'ds', 'Close': 'y'})
+
+    # Ensure the `y` column is numeric and drop invalid rows
+    phdata['y'] = pd.to_numeric(phdata['y'], errors='coerce')
+    phdata = phdata.dropna(subset=['y'])
+
+    if phdata.empty:
+        st.error(f"No valid price data for {ticker} after preprocessing.")
+        return None
 
     # Initialize and fit the Prophet model
     model = Prophet()
-    model.fit(phdata)
+    try:
+        model.fit(phdata)
+    except Exception as e:
+        st.error(f"Failed to fit the model: {e}")
+        return None
 
     # Create a DataFrame for future dates
-    future = model.make_future_dataframe(periods=forecast_days)  # 365 Predict for 1 year into the future
+    future = model.make_future_dataframe(periods=forecast_days)
     forecast = model.predict(future)
 
     # Plot the historical data and forecasted prices
     fig = model.plot(forecast, xlabel='Date', ylabel='Stock Price')
     plt.title(f'Historical and Forecasted Stock Prices for {ticker}')
+    return fig  # Return the Prophet forecast plot
 
-    return fig  # Return the Prophet forecast plot as a Matplotlib figure
 
 def fetch_data(ticker, start_date, ):
     data = yf.download(ticker, start=start_date, end=end_date, progress=False)
