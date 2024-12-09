@@ -1071,8 +1071,37 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
         async with RetryClient(raise_for_status=False, retry_options=retry_options) as session:
             tasks = [fetch_quote_data(ticker, data_types, session) for ticker in tickers]
             return await asyncio.gather(*tasks, return_exceptions=True)
+     def filter_dataframe(df):
+        """
+        Creates a UI for filtering a DataFrame.
+        Returns the filtered DataFrame.
+        """
+        # Create Streamlit widgets for filtering columns
+        modify = st.checkbox("Add Filters")
+        if not modify:
+            return df
+        
+        # Multiselect for columns
+        columns = st.multiselect("Filter columns:", df.columns, default=df.columns)
+        
+        # Filter rows by column values
+        filtered_df = df[columns]
+        for column in columns:
+            if pd.api.types.is_numeric_dtype(df[column]):
+                _min = st.number_input(f"Min value for {column}", value=float(df[column].min()))
+                _max = st.number_input(f"Max value for {column}", value=float(df[column].max()))
+                filtered_df = filtered_df[(df[column] >= _min) & (df[column] <= _max)]
+            elif pd.api.types.is_categorical_dtype(df[column]) or df[column].nunique() < 10:
+                options = st.multiselect(f"Values for {column}", df[column].unique(), default=df[column].unique())
+                filtered_df = filtered_df[df[column].isin(options)]
+            else:
+                text_filter = st.text_input(f"Search in {column}")
+                if text_filter:
+                    filtered_df = filtered_df[filtered_df[column].str.contains(text_filter, na=False)]
+        
+        return filtered_df
     
-    # Function to Concatenate and Display Data
+    # Function to Display Data
     def display_data(results):
         if not results:
             st.warning("No data available.")
@@ -1089,28 +1118,15 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
                 else:
                     combined_data[key] = pd.concat([combined_data[key], df], ignore_index=True)
         
-        # Render Ticker Filter Above Data
-        st.write("### Filter Data by Ticker")
-        selected_ticker = st.selectbox("Filter by Ticker:", ["All"] + tickers)
-        
+        # Render Data with Filtering UI
         for data_type, df in combined_data.items():
             if df.empty:
                 continue  # Skip empty DataFrames
             
-            if "Ticker" not in df.columns:
-                st.warning(f"No 'Ticker' column found in {data_type} data. Skipping filtering.")
-                continue
-            
-            # Apply Filter
-            filtered_df = df if selected_ticker == "All" else df[df["Ticker"] == selected_ticker]
-            
-            # Display Filtered Data
-            if filtered_df.empty:
-                st.write(f"No data available for {selected_ticker} in {data_type.replace('_', ' ').title()}.")
-            else:
-                st.write(f"#### {data_type.replace('_', ' ').title()}")
-                st.dataframe(filtered_df)
-    
+            st.write(f"#### {data_type.replace('_', ' ').title()}")
+            # Apply Filtering UI
+            filtered_df = filter_dataframe(df)
+            st.dataframe(filtered_df)
     # Fetch Metrics Button
     if st.button("Fetch FinViz Metrics"):
         async def run_fetch_all():
