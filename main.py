@@ -1071,7 +1071,7 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
         async with RetryClient(raise_for_status=False, retry_options=retry_options) as session:
             tasks = [fetch_quote_data(ticker, data_types, session) for ticker in tickers]
             return await asyncio.gather(*tasks, return_exceptions=True)
-     def filter_dataframe(df):
+    def filter_dataframe(df):
         """
         Creates a UI for filtering a DataFrame.
         Returns the filtered DataFrame.
