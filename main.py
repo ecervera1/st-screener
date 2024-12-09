@@ -1020,7 +1020,14 @@ if st.sidebar.checkbox('My Portfolio Anlysis', value=False):
 # FinViz Integration
 st.sidebar.title("FinViz")
 
-if st.sidebar.checkbox("FinViz"):
+#12.09.2024
+import asyncio
+import pandas as pd
+
+# FinViz Integration
+st.title("FinViz Data Viewer")
+
+if st.sidebar.checkbox("Enable FinViz Data Viewer"):
     user_input = st.sidebar.text_input("Enter stock tickers (comma-separated):", "AAPL,MSFT,GOOGL")
     tickers = [ticker.strip() for ticker in user_input.split(",") if ticker.strip()]
     
@@ -1042,23 +1049,23 @@ if st.sidebar.checkbox("FinViz"):
             result = {}
             if "Fundamental Data" in data_types:
                 df = quote.fundamental_df.head(10)
-                df.insert(0, "Ticker", ticker)
+                df.insert(0, "Ticker", ticker)  # Insert Ticker as the first column
                 result["fundamental_data"] = df
             if "News" in data_types:
                 df = quote.outer_news_df.head(10)
-                df.insert(0, "Ticker", ticker)
+                df.insert(0, "Ticker", ticker)  # Insert Ticker as the first column
                 result["outer_news"] = df
             if "Insider Trading" in data_types:
                 df = quote.insider_trading_df
-                df.insert(0, "Ticker", ticker)
+                df.insert(0, "Ticker", ticker)  # Insert Ticker as the first column
                 result["insider_trading"] = df
             if "Outer Ratings" in data_types:
                 df = quote.outer_ratings_df
-                df.insert(0, "Ticker", ticker)
+                df.insert(0, "Ticker", ticker)  # Insert Ticker as the first column
                 result["outer_ratings"] = df
             if "Income Statement" in data_types:
                 df = quote.income_statement_df
-                df.insert(0, "Ticker", ticker)
+                df.insert(0, "Ticker", ticker)  # Insert Ticker as the first column
                 result["income_statement"] = df
     
             return result
@@ -1087,15 +1094,16 @@ if st.sidebar.checkbox("FinViz"):
                 if key not in combined_data:
                     combined_data[key] = df
                 else:
-                    combined_data[key] = pd.concat([combined_data[key], df])
+                    combined_data[key] = pd.concat([combined_data[key], df], ignore_index=True)
         
-        # Add Filter for Tickers
-        selected_ticker = st.sidebar.selectbox("Filter by Ticker:", ["All"] + tickers)
+        # Render Ticker Filter Above Data
+        st.write("### Filter Data by Ticker")
+        selected_ticker = st.selectbox("Select a Ticker to Filter Data:", ["All"] + tickers)
+        
         for data_type, df in combined_data.items():
-            if selected_ticker != "All":
-                df = df[df["Ticker"] == selected_ticker]
+            filtered_df = df if selected_ticker == "All" else df[df["Ticker"] == selected_ticker]
             st.write(f"#### {data_type.replace('_', ' ').title()}")
-            st.dataframe(df)
+            st.dataframe(filtered_df)
     
     # Fetch Metrics Button
     if st.button("Fetch FinViz Metrics"):
@@ -1105,6 +1113,7 @@ if st.sidebar.checkbox("FinViz"):
         with st.spinner("Fetching metrics..."):
             results = asyncio.run(run_fetch_all())
             display_data(results)
+
 
 
 
