@@ -1131,9 +1131,9 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
             if "Fundamental Data" in data_types:
                 df = quote.fundamental_df.head(10)
                 df.insert(0, "Ticker", ticker)
-                # result["fundamental_data"] = df
-                df_transposed = df.set_index("Ticker").T  # Transpose the data
-                result["fundamental_data"] = df_transposed
+                result["fundamental_data"] = df
+                # df_transposed = df.set_index("Ticker").T  # Transpose the data
+                # result["fundamental_data"] = df_transposed
             if "News" in data_types:
                 df = quote.outer_news_df.head(10)
                 df.insert(0, "Ticker", ticker)
