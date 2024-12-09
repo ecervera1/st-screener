@@ -89,7 +89,7 @@ def generate_prophet_forecast(ticker, start_date, end_date, forecast_days=365):
     return fig  # Return the Prophet forecast plot
 
 
-def fetch_data(ticker, start_date, ):
+def fetch_data(ticker, start_date, end_date ):
     data = yf.download(ticker, start=start_date, end=end_date, progress=False)
     return data['Adj Close']
     
