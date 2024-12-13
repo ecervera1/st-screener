@@ -353,7 +353,8 @@ custom_css = """
 st.markdown(custom_css, unsafe_allow_html=True)
 
 # Add logo and styled content
-st.markdown('<img src="Cervera_Logo_-_BW-removebg.png" class="logo">', unsafe_allow_html=True)
+st.image("Cervera_Logo_-_BW-removebg.png", width=200, caption="", use_column_width=False)
+
 st.markdown('<div class="title">Portfolio Management</div>', unsafe_allow_html=True)
 st.markdown('<div class="subheader">Stock Comparative Analysis</div>', unsafe_allow_html=True)
 st.markdown('<div class="caption">by Eli Cervera</div>', unsafe_allow_html=True)
