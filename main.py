@@ -167,24 +167,24 @@ custom_css = """
         margin-right: auto;
         width: 200px; /* Adjust width */
     }
-    .title {{
+    .title {
         text-align: center;
         font-family: 'Georgia', serif;
-        color: {title_color};
+        color: black;
         font-size: 2.5em;
-    }}
-    .subheader {{
+    }
+    .subheader {
         text-align: center;
         font-family: 'Georgia', serif;
-        color: {subheader_color};
+        color: black;
         font-size: 1.8em;
-    }}
-    .caption {{
+    }
+    .caption {
         text-align: center;
         font-family: 'Georgia', serif;
-        color: {caption_color};
+        color: navy;
         font-size: 1em;
-    }}
+    }
     /* Center the image */
     .center {
         display: flex;
