@@ -138,17 +138,21 @@ st.markdown(custom_css, unsafe_allow_html=True)
 # if st_theme == 'Dark':
 
 # st.get_current_style() == "dark":
-if 1 = 1:
-    title_color = "white"
-    subheader_color = "white"
-    caption_color = "lightblue"
-    background_color = "#333333"  # Optional background color for dark mode
-else:
-    title_color = "black"
-    subheader_color = "black"
-    caption_color = "navy"
-    background_color = "#FFFFFF"  # Optional background color for light mode
+# if 1 = 1:
+#     title_color = "white"
+#     subheader_color = "white"
+#     caption_color = "lightblue"
+#     background_color = "#333333"  # Optional background color for dark mode
+# else:
+#     title_color = "black"
+#     subheader_color = "black"
+#     caption_color = "navy"
+#     background_color = "#FFFFFF"  # Optional background color for light mode
 
+title_color = "white"
+subheader_color = "white"
+caption_color = "lightblue"
+background_color = "#333333"  # Optional background color for dark mode
 
 # Add custom CSS for styling
 custom_css = """
