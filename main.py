@@ -132,6 +132,20 @@ st.markdown(custom_css, unsafe_allow_html=True)
 #-----------------------------------------------------------
 
 #-------------------------------------ADDING LOGO---------------------------
+
+
+if st.theme() == 'Dark':
+    title_color = "white"
+    subheader_color = "white"
+    caption_color = "lightblue"
+    background_color = "#333333"  # Optional background color for dark mode
+else:
+    title_color = "black"
+    subheader_color = "black"
+    caption_color = "navy"
+    background_color = "#FFFFFF"  # Optional background color for light mode
+
+
 # Add custom CSS for styling
 custom_css = """
 <style>
@@ -145,24 +159,24 @@ custom_css = """
         margin-right: auto;
         width: 200px; /* Adjust width */
     }
-    .title {
+    .title {{
         text-align: center;
         font-family: 'Georgia', serif;
-        color: black;
+        color: {title_color};
         font-size: 2.5em;
-    }
-    .subheader {
+    }}
+    .subheader {{
         text-align: center;
         font-family: 'Georgia', serif;
-        color: black;
+        color: {subheader_color};
         font-size: 1.8em;
-    }
-    .caption {
+    }}
+    .caption {{
         text-align: center;
         font-family: 'Georgia', serif;
-        color: navy;
+        color: {caption_color};
         font-size: 1em;
-    }
+    }}
     /* Center the image */
     .center {
         display: flex;
@@ -204,6 +218,7 @@ center_image("https://raw.githubusercontent.com/ecervera1/st-screener/main/Cerve
 st.markdown('<div class="title">Portfolio Management</div>', unsafe_allow_html=True)
 st.markdown('<div class="subheader">Stock Comparative Analysis</div>', unsafe_allow_html=True)
 st.markdown('<div class="caption">by Eli Cervera</div>', unsafe_allow_html=True)
+
 
 
 
