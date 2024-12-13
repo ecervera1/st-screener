@@ -72,7 +72,7 @@ custom_tab_css = """
         font-weight: bold;
         position: absolute;
         left: 5px;
-        top: 5px;
+        top: 8px;
     }
 </style>
 """
