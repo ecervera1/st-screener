@@ -100,8 +100,8 @@ custom_css = """
 <style>
     /* Style the collapsed sidebar toggle button */
     [data-testid="stSidebarCollapsedControl"] {
-        width: 120px !important;  /* Adjust button width */
-        height: 60px !important;  /* Adjust button height */
+        width: 70px !important;  /* Adjust button width */
+        height: 40px !important;  /* Adjust button height */
         background-color: #d2d3d4 !important; /* Set background color */
         border-radius: 15px; /* Rounded edges */
         display: flex; /* Center content */
