@@ -320,11 +320,49 @@ def get_financial_statements(ticker):
     }
     return financial_statements
 
+#-------------------------------------ADDING LOGO---------------------------
+# Add custom CSS for styling
+custom_css = """
+<style>
+    .logo {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 200px; /* Adjust width */
+    }
+    .title {
+        text-align: center;
+        font-family: 'Georgia', serif;
+        color: navy;
+        font-size: 2.5em;
+    }
+    .subheader {
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+        color: teal;
+        font-size: 1.8em;
+    }
+    .caption {
+        text-align: center;
+        font-family: 'Courier New', monospace;
+        color: gray;
+        font-size: 1em;
+    }
+</style>
+"""
+st.markdown(custom_css, unsafe_allow_html=True)
 
-# Streamlit app layout
-st.title('Portfolio Management')
-st.subheader('Stock Comparative Analysis')
-st.caption("_by Eli Cervera_")
+# Add logo and styled content
+st.markdown('<img src="Cervera_Logo_-_BW-removebg.png" class="logo">', unsafe_allow_html=True)
+st.markdown('<div class="title">Portfolio Management</div>', unsafe_allow_html=True)
+st.markdown('<div class="subheader">Stock Comparative Analysis</div>', unsafe_allow_html=True)
+st.markdown('<div class="caption">_by Eli Cervera_</div>', unsafe_allow_html=True)
+
+
+# # Streamlit app layout
+# st.title('Portfolio Management')
+# st.subheader('Stock Comparative Analysis')
+# st.caption("_by Eli Cervera_")
 
 # Sidebar for user inputs
 st.sidebar.title('Input Parameters')
