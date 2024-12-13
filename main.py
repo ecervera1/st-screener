@@ -71,28 +71,52 @@ st.markdown(hide_toolbar, unsafe_allow_html=True)
 # st.markdown(custom_tab_css, unsafe_allow_html=True)
 
 
-st.markdown(
-    r"""
-    <style>
-    .st-emotion-cache-1f3w014 {
-            # height: 3rem;
-            # width : 3rem;
-            # background-color: RED;
-            animation: bounce 2s ease infinite;
-        }
-    @keyframes bounce {
-        70% { transform:translateY(0%); }
-        80% { transform:translateY(-15%); }
-        90% { transform:translateY(0%); }
-        95% { transform:translateY(-7%); }
-        97% { transform:translateY(0%); }
-        99% { transform:translateY(-3%); }
-        100% { transform:translateY(0); }
-    }
-    </style>
-    """, unsafe_allow_html=True
-)
+# st.markdown(
+#     r"""
+#     <style>
+#     .st-emotion-cache-1f3w014 {
+#             # height: 3rem;
+#             # width : 3rem;
+#             # background-color: RED;
+#             animation: bounce 2s ease infinite;
+#         }
+#     @keyframes bounce {
+#         70% { transform:translateY(0%); }
+#         80% { transform:translateY(-15%); }
+#         90% { transform:translateY(0%); }
+#         95% { transform:translateY(-7%); }
+#         97% { transform:translateY(0%); }
+#         99% { transform:translateY(-3%); }
+#         100% { transform:translateY(0); }
+#     }
+#     </style>
+#     """, unsafe_allow_html=True
+# )
 
+
+# Custom CSS to style and animate the sidebar toggle button
+custom_css = """
+<style>
+    /* Target the sidebar toggle button */
+    [data-testid="collapsedControl"] {
+        width: 50px !important;  /* Adjust width */
+        height: 50px !important; /* Adjust height */
+        background-color: #d2d3d4 !important; /* Set background color */
+        border-radius: 25px; /* Make it circular */
+        animation: bounce 2s ease infinite; /* Apply bounce animation */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Define the bounce animation */
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15%); }
+    }
+</style>
+"""
+st.markdown(custom_css, unsafe_allow_html=True)
 
 
 #-----------------------------------------------------------
