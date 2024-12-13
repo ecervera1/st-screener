@@ -10,3 +10,4 @@ scipy
 seaborn
 aiohttp_retry
 pyfinviz
+st-theme
