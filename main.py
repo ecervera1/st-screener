@@ -94,29 +94,39 @@ st.markdown(hide_toolbar, unsafe_allow_html=True)
 # )
 
 
+
 # Custom CSS to style and animate the sidebar toggle button
 custom_css = """
 <style>
-    /* Target the sidebar toggle button */
-    [data-testid="collapsedControl"] {
-        width: 50px !important;  /* Adjust width */
-        height: 50px !important; /* Adjust height */
+    /* Style the collapsed sidebar toggle button */
+    [data-testid="stSidebarCollapsedControl"] {
+        width: 120px !important;  /* Adjust button width */
+        height: 60px !important;  /* Adjust button height */
         background-color: #d2d3d4 !important; /* Set background color */
-        border-radius: 25px; /* Make it circular */
-        animation: bounce 2s ease infinite; /* Apply bounce animation */
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        border-radius: 15px; /* Rounded edges */
+        display: flex; /* Center content */
+        align-items: center; /* Center vertically */
+        justify-content: center; /* Center horizontally */
+        animation: bounce 2s ease infinite; /* Add bounce animation */
+        cursor: pointer; /* Ensure it's interactive */
     }
 
-    /* Define the bounce animation */
+    /* Define bounce animation */
     @keyframes bounce {
         0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-15%); }
+        50% { transform: translateY(-10px); }
+    }
+
+    /* Optional hover effect */
+    [data-testid="stSidebarCollapsedControl"]:hover {
+        background-color: #d2d3d4 !important; /* Slightly darker on hover */
+        transform: scale(1.05); /* Slightly enlarge on hover */
     }
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
+
+
 
 
 #-----------------------------------------------------------
