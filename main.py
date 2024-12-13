@@ -196,7 +196,8 @@ def center_image(image, width):
  unsafe_allow_html=True
  )
 
-center_image("https://github.com/ecervera1/st-screener/blob/1b74e022daf68b750e3d1ea8a41f81c8f6f8a329/Cervera%20Logo%20BWG.png", 120)
+# center_image("https://github.com/ecervera1/st-screener/blob/1b74e022daf68b750e3d1ea8a41f81c8f6f8a329/Cervera%20Logo%20BWG.png", 120)
+center_image("https://raw.githubusercontent.com/ecervera1/st-screener/main/Cervera%20Logo%20BWG.png", 120)
 # st.markdown('<div class="caption"></div>', unsafe_allow_html=True)
 
 # st.image("Cervera Logo BWG.png", width=120)
