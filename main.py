@@ -276,7 +276,7 @@ def get_financial_statements(ticker):
 # Streamlit app layout
 st.title('Portfolio Management')
 st.subheader('Stock Comparative Analysis')
-st.caption('by Eli Cervera')
+st.caption("_by Eli Cervera_")
 
 # Sidebar for user inputs
 st.sidebar.title('Input Parameters')
