@@ -139,21 +139,27 @@ custom_css = """
     html, body, [class*="css"] {
         font-family: 'Georgia', serif;
     }
-    /* Style for the title */
+   .logo {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 200px; /* Adjust width */
+    }
     .title {
         text-align: center;
+        font-family: 'Georgia', serif;
         color: black;
         font-size: 2.5em;
     }
-    /* Style for the subheader */
     .subheader {
         text-align: center;
+        font-family: 'Georgia', serif;
         color: black;
         font-size: 1.8em;
     }
-    /* Style for the caption */
     .caption {
         text-align: center;
+        font-family: 'Georgia', serif;
         color: navy;
         font-size: 1em;
     }
