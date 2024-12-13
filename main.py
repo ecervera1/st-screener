@@ -333,19 +333,19 @@ custom_css = """
     .title {
         text-align: center;
         font-family: 'Georgia', serif;
-        color: navy;
+        color: black;
         font-size: 2.5em;
     }
     .subheader {
         text-align: center;
-        font-family: 'Arial', sans-serif;
-        color: teal;
+        font-family: 'Georgia', serif;
+        color: black;
         font-size: 1.8em;
     }
     .caption {
         text-align: center;
-        font-family: 'Courier New', monospace;
-        color: gray;
+        font-family: 'Georgia', serif;
+        color: navy;
         font-size: 1em;
     }
 </style>
@@ -356,7 +356,7 @@ st.markdown(custom_css, unsafe_allow_html=True)
 st.markdown('<img src="Cervera_Logo_-_BW-removebg.png" class="logo">', unsafe_allow_html=True)
 st.markdown('<div class="title">Portfolio Management</div>', unsafe_allow_html=True)
 st.markdown('<div class="subheader">Stock Comparative Analysis</div>', unsafe_allow_html=True)
-st.markdown('<div class="caption">_by Eli Cervera_</div>', unsafe_allow_html=True)
+st.markdown('<div class="caption">by Eli Cervera</div>', unsafe_allow_html=True)
 
 
 # # Streamlit app layout
