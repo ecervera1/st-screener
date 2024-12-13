@@ -41,14 +41,16 @@ custom_css = """
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
-hide_github_icon = """
+
+hide_toolbar = """
 <style>
-    [data-testid="stViewerBadge"] {
+    .stAppToolbar {
         display: none;
     }
 </style>
 """
-st.markdown(hide_github_icon, unsafe_allow_html=True)
+st.markdown(hide_toolbar, unsafe_allow_html=True)
+
 
 
 
