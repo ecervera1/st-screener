@@ -176,11 +176,7 @@ st.markdown(custom_css, unsafe_allow_html=True)
 # Add logo
 # st.image("Cervera Logo BWG.png", width=150, caption="")
 
-st.markdown('<div class="center">', unsafe_allow_html=True)
 st.image("Cervera Logo BWG.png", width=120)
-st.markdown('</div>', unsafe_allow_html=True)
-
-    
 st.markdown('<div class="title">Portfolio Management</div>', unsafe_allow_html=True)
 st.markdown('<div class="subheader">Stock Comparative Analysis</div>', unsafe_allow_html=True)
 st.markdown('<div class="caption">by Eli Cervera</div>', unsafe_allow_html=True)
