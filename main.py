@@ -185,7 +185,7 @@ def center_image(image, width):
  unsafe_allow_html=True
  )
 
-center_image("Cervera Logo BWG.png", 120)
+center_image(st.image("Cervera Logo BWG.png", width=120), 120)
 
 # st.image("Cervera Logo BWG.png", width=120)
 st.markdown('<div class="title">Portfolio Management</div>', unsafe_allow_html=True)
