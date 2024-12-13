@@ -81,16 +81,23 @@ st.markdown(custom_tab_css, unsafe_allow_html=True)
 
 #-----------------------------------------------------------
 
-hide_elements = """
+import streamlit as st
+
+hide_all_elements = """
 <style>
-    [data-testid="appCreatorAvatar"],  /* Hides avatar */
-    div[class*="_profileContainer_gzau3_53"],  /* Hides profile container (dynamic class) */
-    div[class*=*"_container_gzau3_1"]
+    div[class*="_container_gzau3_1"] { 
+        display: none !important;
+    }
+
+    div[class*="_link_gzau3_10"], 
+    div[class*="_profileContainer_gzau3_53"], 
+    div[class*="_profilePreview_gzau3_63"] {
         display: none !important;
     }
 </style>
 """
-st.markdown(hide_elements, unsafe_allow_html=True)
+st.markdown(hide_all_elements, unsafe_allow_html=True)
+
 
 
 
