@@ -41,7 +41,7 @@ custom_css = """
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 #-----------------------------------------------------------
-
+#HIDE THE TOOL BAR
 
 hide_toolbar = """
 <style>
@@ -52,14 +52,45 @@ hide_toolbar = """
 """
 st.markdown(hide_toolbar, unsafe_allow_html=True)
 #-----------------------------------------------------------
-hide_all_floating = """
+#MAKE THE SIDEBAR ARROW BIGGER
+# custom_tab_css = """
+# <style>
+#     [data-testid="stSidebarCollapsedControl"] {
+#         width: 50px !important; /* Increase width */
+#         height: 50px !important; /* Increase height */
+#     }
+# </style>
+# """
+# st.markdown(custom_tab_css, unsafe_allow_html=True)
+
+custom_tab_css = """
 <style>
-    div[class^="_profile"] {
+    [data-testid="stSidebarCollapsedControl"]::after {
+        content: "☰ Menu"; /* Add text */
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+    }
+</style>
+"""
+st.markdown(custom_tab_css, unsafe_allow_html=True)
+
+
+#-----------------------------------------------------------
+
+hide_elements = """
+<style>
+    [data-testid="appCreatorAvatar"],  /* Hides avatar */
+    ._profileContainer_gzau3_53,       /* Hides profile container */
+    ._container_gzau3_1 {              /* Hides viewer badge or container */
         display: none !important;
     }
 </style>
 """
-st.markdown(hide_all_floating, unsafe_allow_html=True)
+st.markdown(hide_elements, unsafe_allow_html=True)
 
 
 
