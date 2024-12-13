@@ -52,6 +52,19 @@ hide_toolbar = """
 st.markdown(hide_toolbar, unsafe_allow_html=True)
 
 
+# Sidebar toggle button
+if 'sidebar_state' not in st.session_state:
+    st.session_state.sidebar_state = 'collapsed'
+
+def toggle_sidebar():
+    st.session_state.sidebar_state = 'expanded' if st.session_state.sidebar_state == 'collapsed' else 'collapsed'
+
+# Add a button to toggle sidebar visibility
+st.button("☰ Toggle Sidebar", on_click=toggle_sidebar)
+
+# Render sidebar
+st.sidebar.write("Sidebar Content")
+
 
 
 # Function to generate Prophet forecast plot for a given stock ticker
