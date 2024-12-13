@@ -53,30 +53,59 @@ hide_toolbar = """
 st.markdown(hide_toolbar, unsafe_allow_html=True)
 #-----------------------------------------------------------
 #MAKE THE SIDEBAR ARROW BIGGER
+
+
 # custom_tab_css = """
 # <style>
-#     [data-testid="stSidebarCollapsedControl"] {
-#         width: 50px !important; /* Increase width */
-#         height: 50px !important; /* Increase height */
+#     [data-testid="stSidebarCollapsedControl"]::after {
+#         content: "☰ Menu"; /* Add text */
+#         color: white;
+#         font-size: 12px;
+#         font-weight: bold;
+#         position: absolute;
+#         left: 5px;
+#         top: 8px;
 #     }
 # </style>
 # """
 # st.markdown(custom_tab_css, unsafe_allow_html=True)
 
+import streamlit as st
+
 custom_tab_css = """
 <style>
+    /* Target the sidebar toggle button */
+    [data-testid="stSidebarCollapsedControl"] {
+        width: 60px !important;  /* Increase button width */
+        height: 60px !important; /* Increase button height */
+        background-color: #008CBA !important; /* Add a visible background color */
+        border-radius: 10px; /* Rounded corners */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow for prominence */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease-in-out; /* Add smooth animations */
+    }
+
+    /* Add text or icon to the toggle button */
     [data-testid="stSidebarCollapsedControl"]::after {
-        content: "☰ Menu"; /* Add text */
+        content: "☰ Menu"; /* Text for the button */
         color: white;
-        font-size: 12px;
+        font-size: 16px; /* Larger text for visibility */
         font-weight: bold;
-        position: absolute;
-        left: 5px;
-        top: 8px;
+        position: relative;
+        top: 0;
+    }
+
+    /* Make it more noticeable on hover */
+    [data-testid="stSidebarCollapsedControl"]:hover {
+        background-color: #005F7F !important; /* Darker shade on hover */
+        transform: scale(1.1); /* Slightly enlarge on hover */
     }
 </style>
 """
 st.markdown(custom_tab_css, unsafe_allow_html=True)
+
 
 
 #-----------------------------------------------------------
