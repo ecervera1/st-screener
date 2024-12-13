@@ -40,6 +40,7 @@ custom_css = """
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
+#-----------------------------------------------------------
 
 
 hide_toolbar = """
@@ -50,20 +51,16 @@ hide_toolbar = """
 </style>
 """
 st.markdown(hide_toolbar, unsafe_allow_html=True)
+#-----------------------------------------------------------
+hide_profile_preview = """
+<style>
+    ._profileContainer_gzau3_53 {
+        display: none !important;
+    }
+</style>
+"""
+st.markdown(hide_profile_preview, unsafe_allow_html=True)
 
-
-# Sidebar toggle button
-if 'sidebar_state' not in st.session_state:
-    st.session_state.sidebar_state = 'collapsed'
-
-def toggle_sidebar():
-    st.session_state.sidebar_state = 'expanded' if st.session_state.sidebar_state == 'collapsed' else 'collapsed'
-
-# Add a button to toggle sidebar visibility
-st.button("☰ Toggle Sidebar", on_click=toggle_sidebar)
-
-# Render sidebar
-st.sidebar.write("Sidebar Content")
 
 
 
