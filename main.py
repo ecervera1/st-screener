@@ -174,7 +174,13 @@ st.markdown(custom_css, unsafe_allow_html=True)
 
 # Add logo
 st.markdown('<div class="center">', unsafe_allow_html=True)
-st.image("Cervera Logo BWG.png", width=200, caption="")
+logo=st.image("Cervera Logo BWG.png", width=200, caption="")
+
+
+left_co, cent_co,last_co = st.columns(3)
+with cent_co:
+    st.image(logo)
+
 st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown('<div class="title">Portfolio Management</div>', unsafe_allow_html=True)
