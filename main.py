@@ -169,6 +169,17 @@ custom_css = """
         justify-content: center;
         align-items: center;
     }
+    @media (prefers-color-scheme: dark) {
+        .title {
+            color: white; /* Title color for dark mode */
+        }
+        .subheader {
+            color: white; /* Subheader color for dark mode */
+        }
+        .caption {
+            color: lightblue; /* Caption color for dark mode */
+        }
+    }
 </style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
@@ -179,13 +190,14 @@ st.markdown(custom_css, unsafe_allow_html=True)
 logo = "Cervera Logo BWG.png"  # Replace with the correct path to your image
 def center_image(image, width):
  st.markdown(
- f'<div style="display: flex; justify-content: center;">'
+ f'<div style="display: flex; justify-content: center; margin-top: -50px;">'
  f'<img src="{image}" width="{width}">'
  f'</div>',
  unsafe_allow_html=True
  )
 
-center_image("https://cervera.streamlit.app/~/+/media/87e2b0b1905013477737597aaf21f23159c6c1b03c29a0b985f6258c.png", 120)
+center_image("https://github.com/ecervera1/st-screener/blob/1b74e022daf68b750e3d1ea8a41f81c8f6f8a329/Cervera%20Logo%20BWG.png", 120)
+# st.markdown('<div class="caption"></div>', unsafe_allow_html=True)
 
 # st.image("Cervera Logo BWG.png", width=120)
 st.markdown('<div class="title">Portfolio Management</div>', unsafe_allow_html=True)
