@@ -76,35 +76,41 @@ custom_tab_css = """
 <style>
     /* Target the sidebar toggle button */
     [data-testid="stSidebarCollapsedControl"] {
-        width: 60px !important;  /* Increase button width */
-        height: 60px !important; /* Increase button height */
+        width: 140px !important;  /* Increase button width */
+        height: 70px !important; /* Increase button height */
         background-color: #008CBA !important; /* Add a visible background color */
-        border-radius: 10px; /* Rounded corners */
+        border-radius: 15px; /* Rounded corners for better design */
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow for prominence */
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s ease-in-out; /* Add smooth animations */
+        position: relative;
+        overflow: hidden; /* Prevent unwanted content from appearing */
     }
 
-    /* Add text or icon to the toggle button */
+    /* Remove the default arrow */
+    [data-testid="stSidebarCollapsedControl"] > div {
+        display: none !important; /* Hide the default arrow or any child content */
+    }
+
+    /* Add custom text or icon */
     [data-testid="stSidebarCollapsedControl"]::after {
-        content: "☰ Menu"; /* Text for the button */
+        content: "☰ Menu"; /* Custom text/icon */
         color: white;
-        font-size: 16px; /* Larger text for visibility */
+        font-size: 18px; /* Adjust text size for better readability */
         font-weight: bold;
         position: relative;
-        top: 0;
     }
 
-    /* Make it more noticeable on hover */
+    /* Hover effect for better interactivity */
     [data-testid="stSidebarCollapsedControl"]:hover {
-        background-color: #005F7F !important; /* Darker shade on hover */
-        transform: scale(1.1); /* Slightly enlarge on hover */
+        background-color: #005F7F !important; /* Darker blue on hover */
+        transform: scale(1.1); /* Slightly enlarge on hover for emphasis */
     }
 </style>
 """
 st.markdown(custom_tab_css, unsafe_allow_html=True)
+
 
 
 
