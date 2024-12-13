@@ -84,9 +84,8 @@ st.markdown(custom_tab_css, unsafe_allow_html=True)
 hide_elements = """
 <style>
     [data-testid="appCreatorAvatar"],  /* Hides avatar */
-    div[class*="_profileContainer"],  /* Hides profile container (dynamic class) */
-    div[class*="_container"],         /* Hides viewer badge or related elements */
-    div[data-testid="stSidebarCollapsedControl"] { /* Optional: Hide sidebar toggle */
+    div[class*="_profileContainer_gzau3_53"],  /* Hides profile container (dynamic class) */
+    div[class*=*"_container_gzau3_1"]
         display: none !important;
     }
 </style>
