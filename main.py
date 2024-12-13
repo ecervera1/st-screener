@@ -71,46 +71,54 @@ st.markdown(hide_toolbar, unsafe_allow_html=True)
 # st.markdown(custom_tab_css, unsafe_allow_html=True)
 
 
-# Inject custom CSS for the sidebar toggle button
+
+# Custom CSS for styling the sidebar toggle button
 custom_tab_css = """
 <style>
-    /* Target the sidebar toggle button */
+    /* Style the sidebar toggle button */
     [data-testid="stSidebarCollapsedControl"] {
-        width: 120px !important;  /* Increase button width */
-        height: 60px !important; /* Increase button height */
-        background-color: #a8a8a8 !important; /* Add a visible background color */
-        border-radius: 15px; /* Rounded corners for better design */
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow for prominence */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        overflow: hidden; /* Prevent unwanted content from appearing */
-        cursor: pointer; /* Ensure the button shows as clickable */
+        width: 70px !important;  /* Larger size for better usability */
+        height: 70px !important; /* Larger size for better usability */
+        background-color: #008CBA !important; /* Custom background color */
+        border-radius: 15px; /* Rounded corners */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow for emphasis */
+        display: flex; /* Center custom content */
+        align-items: center; /* Center content vertically */
+        justify-content: center; /* Center content horizontally */
+        cursor: pointer; /* Ensure button appears clickable */
+        transition: all 0.3s ease-in-out; /* Smooth hover effects */
     }
 
-    /* Remove the default arrow */
+    /* Hide the default arrow or other visuals inside the button */
     [data-testid="stSidebarCollapsedControl"] > div {
-        display: none !important; /* Hide the default arrow or any child content */
+        display: none !important;
     }
 
-    /* Add custom text or icon */
+    /* Add custom text or icon for the toggle button */
     [data-testid="stSidebarCollapsedControl"]::after {
-        content: "☰ Menu"; /* Custom text/icon */
+        content: "☰ Menu"; /* Replace with menu text or icon */
         color: white;
-        font-size: 18px; /* Adjust text size for better readability */
+        font-size: 18px; /* Increase text size for visibility */
         font-weight: bold;
-        position: relative;
     }
 
-    /* Hover effect for better interactivity */
+    /* Add hover effects */
     [data-testid="stSidebarCollapsedControl"]:hover {
         background-color: #005F7F !important; /* Darker blue on hover */
-        transform: scale(1.1); /* Slightly enlarge on hover for emphasis */
+        transform: scale(1.1); /* Slightly enlarge on hover */
     }
 </style>
 """
 st.markdown(custom_tab_css, unsafe_allow_html=True)
+
+# Sidebar content for testing
+st.sidebar.title("Sidebar Content")
+st.sidebar.write("Here is your sidebar content.")
+
+# Main page content
+st.write("Main Content Area")
+st.write("Click the '☰ Menu' button to toggle the sidebar.")
+
 
 
 
