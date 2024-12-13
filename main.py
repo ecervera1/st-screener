@@ -43,12 +43,13 @@ st.markdown(custom_css, unsafe_allow_html=True)
 
 hide_github_icon = """
 <style>
-.viewerBadge_container__1QSob {  /* Adjust the class name as needed */
-    display: none;
-}
+    [data-testid="stViewerBadge"] {
+        display: none;
+    }
 </style>
 """
 st.markdown(hide_github_icon, unsafe_allow_html=True)
+
 
 
 # Function to generate Prophet forecast plot for a given stock ticker
