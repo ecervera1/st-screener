@@ -52,14 +52,15 @@ hide_toolbar = """
 """
 st.markdown(hide_toolbar, unsafe_allow_html=True)
 #-----------------------------------------------------------
-hide_profile_preview = """
+hide_all_floating = """
 <style>
-    ._profileContainer_gzau3_53 {
+    div[class^="_profile"] {
         display: none !important;
     }
 </style>
 """
-st.markdown(hide_profile_preview, unsafe_allow_html=True)
+st.markdown(hide_all_floating, unsafe_allow_html=True)
+
 
 
 
