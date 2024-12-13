@@ -133,8 +133,12 @@ st.markdown(custom_css, unsafe_allow_html=True)
 
 #-------------------------------------ADDING LOGO---------------------------
 
+# from streamlit_theme import st_theme
 
-if st.theme() == 'Dark':
+# if st_theme == 'Dark':
+
+# st.get_current_style() == "dark":
+if 1 = 1:
     title_color = "white"
     subheader_color = "white"
     caption_color = "lightblue"
