@@ -70,15 +70,15 @@ st.markdown(hide_toolbar, unsafe_allow_html=True)
 # """
 # st.markdown(custom_tab_css, unsafe_allow_html=True)
 
-import streamlit as st
 
+# Inject custom CSS for the sidebar toggle button
 custom_tab_css = """
 <style>
     /* Target the sidebar toggle button */
     [data-testid="stSidebarCollapsedControl"] {
-        width: 140px !important;  /* Increase button width */
-        height: 70px !important; /* Increase button height */
-        background-color: #008CBA !important; /* Add a visible background color */
+        width: 120px !important;  /* Increase button width */
+        height: 60px !important; /* Increase button height */
+        background-color: #a8a8a8 !important; /* Add a visible background color */
         border-radius: 15px; /* Rounded corners for better design */
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow for prominence */
         display: flex;
@@ -86,6 +86,7 @@ custom_tab_css = """
         justify-content: center;
         position: relative;
         overflow: hidden; /* Prevent unwanted content from appearing */
+        cursor: pointer; /* Ensure the button shows as clickable */
     }
 
     /* Remove the default arrow */
@@ -110,6 +111,12 @@ custom_tab_css = """
 </style>
 """
 st.markdown(custom_tab_css, unsafe_allow_html=True)
+
+
+
+
+#-----------------------------------------------------------
+
 
 
 
