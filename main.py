@@ -131,7 +131,49 @@ st.markdown(custom_css, unsafe_allow_html=True)
 
 #-----------------------------------------------------------
 
+#-------------------------------------ADDING LOGO---------------------------
+# Add custom CSS for styling
+custom_css = """
+<style>
+    /* Set the universal font to Georgia */
+    html, body, [class*="css"] {
+        font-family: 'Georgia', serif;
+    }
+    /* Style for the title */
+    .title {
+        text-align: center;
+        color: black;
+        font-size: 2.5em;
+    }
+    /* Style for the subheader */
+    .subheader {
+        text-align: center;
+        color: black;
+        font-size: 1.8em;
+    }
+    /* Style for the caption */
+    .caption {
+        text-align: center;
+        color: navy;
+        font-size: 1em;
+    }
+    /* Center the image */
+    .center {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+"""
+st.markdown(custom_css, unsafe_allow_html=True)
 
+# Add logo
+st.markdown('<div class="center">', unsafe_allow_html=True)
+st.image("Cervera Logo BWG.png", width=200, caption="")
+st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="title">Portfolio Management</div>', unsafe_allow_html=True)
+st.markdown('<div class="subheader">Stock Comparative Analysis</div>', unsafe_allow_html=True)
+st.markdown('<div class="caption">by Eli Cervera</div>', unsafe_allow_html=True)
 
 
 
@@ -320,44 +362,6 @@ def get_financial_statements(ticker):
     }
     return financial_statements
 
-#-------------------------------------ADDING LOGO---------------------------
-# Add custom CSS for styling
-custom_css = """
-<style>
-    .logo {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 200px; /* Adjust width */
-    }
-    .title {
-        text-align: center;
-        font-family: 'Georgia', serif;
-        color: black;
-        font-size: 2.5em;
-    }
-    .subheader {
-        text-align: center;
-        font-family: 'Georgia', serif;
-        color: black;
-        font-size: 1.8em;
-    }
-    .caption {
-        text-align: center;
-        font-family: 'Georgia', serif;
-        color: navy;
-        font-size: 1em;
-    }
-</style>
-"""
-st.markdown(custom_css, unsafe_allow_html=True)
-
-# Add logo and styled content
-st.image("Cervera_Logo_-_BW-removebg.png", width=200, caption="", use_column_width=False)
-
-st.markdown('<div class="title">Portfolio Management</div>', unsafe_allow_html=True)
-st.markdown('<div class="subheader">Stock Comparative Analysis</div>', unsafe_allow_html=True)
-st.markdown('<div class="caption">by Eli Cervera</div>', unsafe_allow_html=True)
 
 
 # # Streamlit app layout
