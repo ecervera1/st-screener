@@ -177,12 +177,15 @@ st.markdown(custom_css, unsafe_allow_html=True)
 # st.image("Cervera Logo BWG.png", width=150, caption="")
 
 logo = "Cervera Logo BWG.png"  # Replace with the correct path to your image
-# col1, col2, col3 = st.columns(3)  # Adjust column widths for better centering
-# with col2:
-#     st.image(logo, width=120)  # Adjust width as needed
+def center_image(image, width):
+ st.markdown(
+ f'<div style="display: flex; justify-content: center;">'
+ f'<img src="{image}" width="{width}">'
+ f'</div>',
+ unsafe_allow_html=True
+ )
 
-col1, col2, col3 = st.columns(3)
-col2.image(logo, width=120)
+center_image("Cervera Logo BWG.png", 120)
 
 # st.image("Cervera Logo BWG.png", width=120)
 st.markdown('<div class="title">Portfolio Management</div>', unsafe_allow_html=True)
