@@ -173,10 +173,13 @@ custom_css = """
 st.markdown(custom_css, unsafe_allow_html=True)
 
 # Add logo
-# st.image("Cervera Logo BWG.png", width=200, caption="")
-left_co, cent_co,last_co = st.columns(3)
-with cent_co:
-    st.image(st.image("Cervera Logo BWG.png", width=200, caption=""))
+st.image("Cervera Logo BWG.png", width=200, caption="")
+st.markdown('<div class="center"><img src="Cervera Logo BWG.png" class="logo"></div>', unsafe_allow_html=True)
+
+# left_co, cent_co,last_co = st.columns(3)
+# with cent_co:
+#     st.image(st.image("Cervera Logo BWG.png", width=200, caption=""))
+    
 st.markdown('<div class="title">Portfolio Management</div>', unsafe_allow_html=True)
 st.markdown('<div class="subheader">Stock Comparative Analysis</div>', unsafe_allow_html=True)
 st.markdown('<div class="caption">by Eli Cervera</div>', unsafe_allow_html=True)
