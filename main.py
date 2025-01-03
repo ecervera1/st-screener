@@ -527,6 +527,7 @@ if st.sidebar.button('Run'):
 
     # Plot stock performance
     data = fetch_stock_performance(tickers, start_date, end_date)
+    st.table(data)
 
     st.title('Stock Performance Chart')
     # Format the date range for the selected date range
