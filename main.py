@@ -289,7 +289,7 @@ def generate_prophet_forecast(ticker, start_date, end_date, forecast_days=365):
 
 def fetch_data(ticker, start_date, end_date ):
     data = yf.download(ticker, start=start_date, end=end_date, progress=False)
-    return data['Adj Close']
+    return data['Close']
     
 def calculate_parameters(data):
     returns = data.pct_change()
@@ -527,7 +527,7 @@ if st.sidebar.button('Run'):
 
     # Plot stock performance
     data = fetch_stock_performance(tickers, start_date, end_date)
-    st.table(data)
+    # st.table(data)
 
     st.title('Stock Performance Chart')
     # Format the date range for the selected date range
@@ -537,7 +537,7 @@ if st.sidebar.button('Run'):
     st.markdown(f'({formatted_start_date} - {formatted_end_date})')
     
     # Plotting the interactive line chart
-    st.line_chart(data['Adj Close'])
+    st.line_chart(data['Close'])
 
 
 
@@ -555,7 +555,7 @@ if st.sidebar.button('Run'):
     st.markdown(f'({formatted_last_10_years_start_date} - {formatted_last_10_years_end_date})')
 
     # Plotting the interactive line chart for the last 10 years
-    st.line_chart(data_last_10_years['Adj Close'])
+    st.line_chart(data_last_10_years['Close'])
     
     st.title('Stock Data')
 
