@@ -1420,4 +1420,3 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
                 results = asyncio.run(fetch_all_quote_data(tickers, selected_data_types))
                 st.session_state["data"] = results
         display_data(st.session_state["data"])
-        
