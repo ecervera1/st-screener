@@ -617,33 +617,19 @@ if st.sidebar.button('Run'):
         market_caps = {ticker: scrape_market_cap(ticker) for ticker in tickers}
         
         # # Find the largest market cap for scaling
-        # max_market_cap = max(market_caps.values())
+        max_market_cap = max(market_caps.values())
 
         
         # # 010825 - commented section above to try the one below ----------
-        failed_tickers = []  # List to track failed tickers
-        market_caps = {}  # Dictionary to store market caps
-
-        # Fetch market cap data for each ticker
-        # for ticker in tickers:
-        #     try:
-        #         stock = yf.Ticker(ticker)
-        #         info = stock.info
-        #         market_cap = info.get("marketCap")
-        #         if market_cap is not None:
-        #             market_caps[ticker] = market_cap
-        #         else:
-        #             failed_tickers.append(ticker)
-        #     except Exception as e:
-        #         failed_tickers.append(ticker)
-        #         st.error(f"Error fetching market cap for {ticker}: {e}")
+        # failed_tickers = []  # List to track failed tickers
+        # market_caps = {}  # Dictionary to store market caps
     
         # Ensure we have valid market caps
-        if market_caps:
-            max_market_cap = max(market_caps.values())
-        else:
-            # st.error("No valid market cap data available.")
-            max_market_cap = 1  # Default to avoid division by zero
+        # if market_caps:
+        #     max_market_cap = max(market_caps.values())
+        # else:
+        #     # st.error("No valid market cap data available.")
+        #     max_market_cap = 1  # Default to avoid division by zero
             
 
         
