@@ -426,10 +426,7 @@ def get_financial_statements(ticker):
 st.sidebar.title('Input Parameters')
 
 # Input for stock tickers
-user_input = st.sidebar.text_input("Enter stock tickers separated by commas", "WMT, TSLA, T, AXP, META, NFLX, LLY, ARM, ARR, COST, UPST, MMM, MSFT, NVDA, M, VZ, ATO, UNH, PM, SPG, GILD, AAPL, LMT, O, ABT, SHEL, TM, CI, ABNB, HGV, PLTR, CVX, XOM, PK, BUD, FDX, ASML, F, PFE, BIIB, MHO, ZETA, NVO, MRNA")
-#user_input = st.sidebar.text_input("Enter stock tickers separated by commas", "LLY, ABT, MRNA, JNJ, BIIB, BMY, PFE, NVO, UNH, ISRG, GEHC")
-#NOTES:
-# 010825 - WMT, TSLA, T, AXP, META, NFLX, LLY, ARM, ARR, COST, UPST, MMM, MSFT, NVDA, M, VZ, ATO, UNH, PM, SPG, GILD, AAPL, LMT, O, ABT, SHEL, TM, CI, ABNB, HGV, PLTR, CVX, XOM, PK, BUD, FDX, ASML, F, PFE, BIIB, MHO, ZETA, NVO, MRNA
+user_input = st.sidebar.text_input("Enter stock tickers separated by commas", "LLY, ABT, MRNA, JNJ, BIIB, BMY, PFE, NVO, UNH, ISRG, GEHC")
 # user_input = st.sidebar.text_input("Enter stock tickers separated by commas", "WMT, T, TSLA, NFLX, META, AXP, LLY, UPST, C, COST, ARM, VZ, PK, MSFT, MMM, M, UNH, NVDA, LMT, ATO, PM, GILD, AAPL, CI, ABT, HGV, SHEL, BUD, ABNB, TM, CVX, XOM, MHO, FDX, NVO, F, ZETA, ASML, BIIB, PFE, MRNA")
 # "TQQQ, WMT, T, MSTY, TSLA, NFLX, META, AXP, LLY, UPST, SPY, C, ARR, SPXL, COST, ARM, VZ, PK, MSFT, MMM, M, UNH, QQQ, NVDA, JEPQ, LMT, ATO, PM, SCHD, SPG, O, JEPI, GILD, AAPL, CI, XYLD, ABT, HGV, SHEL, BUD, ABNB, NVDY, TM, CVX, XOM, MHO, FDX, NVO, F, CONY, TSLS, ZETA, ASML, BIIB, PFE, FIAT, MRNA, QQQY, TSLY")
 
@@ -605,33 +602,18 @@ if st.sidebar.button('Run'):
 
     for i, ticker in enumerate(tickers, start=1):
 
-        
-        # # Function to scrape market cap data
+        # Function to scrape market cap data
         def scrape_market_cap(ticker):
             stock = yf.Ticker(ticker)
             info = stock.info
             market_cap = info.get("marketCap")
             return market_cap
     
-        # # Get market cap data
+        # Get market cap data
         market_caps = {ticker: scrape_market_cap(ticker) for ticker in tickers}
         
-        # # Find the largest market cap for scaling
+        # Find the largest market cap for scaling
         max_market_cap = max(market_caps.values())
-
-        
-        # # 010825 - commented section above to try the one below ----------
-        # failed_tickers = []  # List to track failed tickers
-        # market_caps = {}  # Dictionary to store market caps
-    
-        # Ensure we have valid market caps
-        # if market_caps:
-        #     max_market_cap = max(market_caps.values())
-        # else:
-        #     # st.error("No valid market cap data available.")
-        #     max_market_cap = 1  # Default to avoid division by zero
-            
-
         
         #Scrape data for the ticker
         stock_data = scrape_stock_data(ticker)
@@ -745,12 +727,8 @@ if st.sidebar.button('Run'):
     
         ax4.axis('off')
 
-    # added 010825
-    # if failed_tickers:
-    #     footnote_text = f"Market cap data not available for: {', '.join(failed_tickers)}"
-    #     plt.figtext(0.5, -0.1, footnote_text, wrap=True, horizontalalignment='center', fontsize=10)
+        
 
-    
     plt.tight_layout()
     st.pyplot(fig, use_container_width=True)
 
@@ -1442,3 +1420,4 @@ if st.sidebar.checkbox("FinViz Data Viewer"):
                 results = asyncio.run(fetch_all_quote_data(tickers, selected_data_types))
                 st.session_state["data"] = results
         display_data(st.session_state["data"])
+        
